@@ -190,8 +190,8 @@ function ContactForm({ gridWidth }) {
                                     name="subject"
                                     rules={[
                                         {
-                                            required: false,
-                                            message: 'Please input your username!',
+                                            required: true,
+                                            message: 'Please Enter your subject',
                                         },
                                     ]}
                                 >

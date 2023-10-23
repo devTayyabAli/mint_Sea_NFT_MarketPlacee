@@ -499,7 +499,7 @@ function NftItem({
           {/* <div className="position-relative mb-2 shadow"> */}
           <div className="z-index-20 mb-2 d-flex align-items-center">
             <div className="rounded-circle">
-              { NFT.Owner_Image !== null && NFT.Owner_Image !==undefined  ? (
+              { NFT.Owner_Image !== null && NFT.Owner_Image !==undefined && NFT.Owner_Image !==""   ? (
                 <>
                   <img
                     src={

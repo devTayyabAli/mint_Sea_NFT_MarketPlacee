@@ -264,7 +264,7 @@ function Home({ topSellers }) {
                             >
                                 {
 
-                                    AllNFTS.data.data.filter((element) => element.price == "01000000000000000").slice(Math.max(ShowData.filter((element) => element.price == "01000000000000000").length - 10, 0)).reverse().map((NFT, key) => {
+                                    AllNFTS.data.data.filter((element) => element.price == "01000000000000000").slice(Math.max(ShowData.filter((element) => element.price == "01000000000000000").length - 10, 10)).reverse().map((NFT, key) => {
                                         const index = marketplaceCtx.offers
                                             ? marketplaceCtx.offers.findIndex((offer) => offer.id === NFT.id)
                                             : -1;
@@ -412,7 +412,7 @@ function Home({ topSellers }) {
                                 }}
                                 navigation={Boolean(ShowData.length !== 0)}
                             >
-                                {AllNFTS?.data?.data.filter((element) => element.price != "01000000000000000").slice(Math.max(ShowData.filter((element) => element.price != "01000000000000000").length - 10, 0)).reverse().map((NFT, key) => {
+                                {AllNFTS?.data?.data.filter((element) => element.price != "01000000000000000").slice(Math.max(ShowData.filter((element) => element.price != "01000000000000000").length - 20, 0)).reverse().map((NFT, key) => {
                                     // console.log("Show_items",NFT.price);
                                     const index = marketplaceCtx.offers
                                         ? marketplaceCtx.offers.findIndex((offer) => offer.id === NFT.id)
