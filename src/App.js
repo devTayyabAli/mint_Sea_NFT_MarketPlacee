@@ -71,43 +71,43 @@ function App() {
     const [userFunds_ClaimAble, setUserFunds_ClaimAble] = useState(0)
 
 
-    useEffect(() => {
-        if (marketplaceCtx.sellers) {
-            const sellersAddress = marketplaceCtx.sellers['0'];
-            const sellersEth = marketplaceCtx.sellers['1'];
+    // useEffect(() => {
+    //     if (marketplaceCtx.sellers) {
+    //         const sellersAddress = marketplaceCtx.sellers['0'];
+    //         const sellersEth = marketplaceCtx.sellers['1'];
 
-            let values = [];
-            for (let i = 0; i < sellersAddress.length; i++) {
-                values.push({
-                    address: sellersAddress[i],
-                    value: parseInt(sellersEth[i]),
-                });
-            }
-            var calcTopSellers = [];
-            values.forEach(function (item) {
-                var existing = calcTopSellers.filter(function (v, i) {
-                    return v.address === item.address;
-                });
-                if (existing.length) {
-                    var existingIndex = calcTopSellers.indexOf(existing[0]);
-                    calcTopSellers[existingIndex].value = calcTopSellers[existingIndex].value.concat(item.value);
-                } else {
-                    if (typeof item.value === 'number') item.value = [item.value];
-                    calcTopSellers.push(item);
-                }
-            });
+    //         let values = [];
+    //         for (let i = 0; i < sellersAddress.length; i++) {
+    //             values.push({
+    //                 address: sellersAddress[i],
+    //                 value: parseInt(sellersEth[i]),
+    //             });
+    //         }
+    //         var calcTopSellers = [];
+    //         values.forEach(function (item) {
+    //             var existing = calcTopSellers.filter(function (v, i) {
+    //                 return v.address === item.address;
+    //             });
+    //             if (existing.length) {
+    //                 var existingIndex = calcTopSellers.indexOf(existing[0]);
+    //                 calcTopSellers[existingIndex].value = calcTopSellers[existingIndex].value.concat(item.value);
+    //             } else {
+    //                 if (typeof item.value === 'number') item.value = [item.value];
+    //                 calcTopSellers.push(item);
+    //             }
+    //         });
 
-            setTopSellers(
-                calcTopSellers.map((seller) => {
-                    return { address: seller.address, value: seller.value.reduce((a, b) => a + b, 0) };
-                })
-            );
-        }
-    }, [marketplaceCtx.sellers]);
+    //         setTopSellers(
+    //             calcTopSellers.map((seller) => {
+    //                 return { address: seller.address, value: seller.value.reduce((a, b) => a + b, 0) };
+    //             })
+    //         );
+    //     }
+    // }, [marketplaceCtx.sellers]);
 
     useEffect(() => {
         const getCahinId = async () => {
-            if (walletAddress) {
+            if (address) {
                 if (window.ethereum) {
                     window.web3 = new Web3(window.ethereum);
                     // await window.ethereum.enable();
@@ -124,30 +124,30 @@ function App() {
             }
         }
         getCahinId()
-        const loadBlockchainData = async () => {
-            try {
+        // const loadBlockchainData = async () => {
+        //     try {
 
-                if (walletAddress) {
-                    let Offers_Array = []
-                    let nftMarketContractOf = new web3.eth.Contract(
-                        nftMarketContractAddress_Abi,
-                        nftMarketContractAddress
-                    );
-                    let OfferCount = await nftMarketContractOf.methods.offerCount().call()
-                    for (let i = 1; i <= OfferCount; i++) {
-                        let Offer = await nftMarketContractOf.methods.offers(i).call()
-                        Offers_Array = [...Offers_Array, Offer]
+        //         if (walletAddress) {
+        //             let Offers_Array = []
+        //             let nftMarketContractOf = new web3.eth.Contract(
+        //                 nftMarketContractAddress_Abi,
+        //                 nftMarketContractAddress
+        //             );
+        //             let OfferCount = await nftMarketContractOf.methods.offerCount().call()
+        //             for (let i = 1; i <= OfferCount; i++) {
+        //                 let Offer = await nftMarketContractOf.methods.offers(i).call()
+        //                 Offers_Array = [...Offers_Array, Offer]
 
-                    }
-                    dispatch(LoadOffers(Offers_Array))
-                }
-            } catch (error) {
-                console.log(error);
-            }
+        //             }
+        //             dispatch(LoadOffers(Offers_Array))
+        //         }
+        //     } catch (error) {
+        //         console.log(error);
+        //     }
 
-        }
-        loadBlockchainData()
-    }, [walletAddress]);
+        // }
+        // loadBlockchainData()
+    }, [address,chainId]);
     const fetchData = async () => {
         if (address) {
             let res = await axios.get(
@@ -185,7 +185,7 @@ function App() {
         fetchData()
         dispatch(getLoarem("All"))
         dispatch(getTranding())
-    }, [address])
+    }, [address,chainId])
 
 
     useEffect(() => {
@@ -220,7 +220,7 @@ function App() {
         })
         fetchData()
 
-    },[address])
+    },[address,chainId])
 
     useEffect(() => {
         const claim_Able = async () => {
@@ -289,7 +289,7 @@ function App() {
                         <Route path='/explore'>
                             <Explore />
                         </Route>
-                        <Route path='/assets/:id/:chainid'>
+                        <Route path='/assets/:id/:chain_id'>
                             <ItemSingle />
                         </Route>
                         <Route path='/categories/:category'>

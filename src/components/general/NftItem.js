@@ -493,11 +493,11 @@ function NftItem({
 
   return (
     <>
-      <div className={`card top-saller-Card card-hover-minimal ${category}`}>
+      <div className={`card top-saller-Card  ${category}`}>
         <div className="card-body m-1 p-2 h-i-w-Card position-relative">
           {MktIsLoading ? <FullScreenLoader heading="loading" /> : null}
           {/* <div className="position-relative mb-2 shadow"> */}
-          <div className="z-index-20 mb-2 d-flex align-items-center">
+          <div className="z-index-20  mb-2 d-flex align-items-center">
             <div className="rounded-circle">
               { NFT.Owner_Image !== null && NFT.Owner_Image !==undefined && NFT.Owner_Image !==""   ? (
                 <>

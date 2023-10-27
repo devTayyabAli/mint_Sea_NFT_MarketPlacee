@@ -13703,7 +13703,7 @@ input[type='date']::-webkit-calendar-picker-indicator {
 
 .miniloader,
 .miniloader:before,
-.miniloader:after {
+.miniloader:after { 
     border-radius: 50%;
     width: 2.5em;
     height: 2.5em;

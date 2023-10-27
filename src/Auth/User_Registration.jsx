@@ -28,6 +28,7 @@ import { Pagination } from "@mui/material";
 import Loader from "../components/general/Loader";
 import { getLoarem } from "../Redux/GetNFTs";
 import { getTranding } from "../Redux/tranding_NFTs";
+import NoDataAlert from "../components/general/NoDataAlert";
 
 export default function User_Registration() {
   const [IsSpinner, setIsSpinner] = useState(false);
@@ -39,13 +40,14 @@ export default function User_Registration() {
   const [ethereumchain, setethereumchain] = useState(0);
   const [selectChain, setselectChain] = useState(null);
   const [chainSort, setchainSort] = useState([]);
+  const [Loading_Spinner, setLoading_Spinner] = useState(false);
   const dispatch = useDispatch();
   const history = useHistory();
   const { addToast } = useToasts();
   const { address } = useAccount();
   const chainId = useChainId();
   const user_Profile = useSelector((state) => state.Offers.user_Profile);
-  
+
   const vidRef = useRef(null);
   const vidButtonRef = useRef(null);
   const [currentPage, setPage] = useState(1);
@@ -73,6 +75,7 @@ export default function User_Registration() {
   const runApp = async () => {
     let imageArray = [];
     try {
+      setLoading_Spinner(true);
       let chain;
       if (chainId == 11155111) {
         chain = EvmChain.SEPOLIA;
@@ -109,7 +112,6 @@ export default function User_Registration() {
       // console.log("getWalletNFTs", res);
       res = res?.jsonResponse?.result;
 
-      console.log("Length",res);
       let name;
       let symbol;
       let created_date;
@@ -136,7 +138,7 @@ export default function User_Registration() {
           ) {
             // if(allNFTs[j][i].token_address=="0xF766Ad06a71C51B7dbbb2e3C717A52BD354155d2" || allNFTs[j][i].token_address=="0xb0EfbDd0826FB657Dbb5b10161EB0533EA6220Bf" || allNFTs[j][i].token_address=="0x58C7dC293906Afe7Ae4fC719Ae54DBB18DA73dE4" )
             // {
-            console.log("allNFTsallNFTs",jsonUsrl);
+            console.log("allNFTsallNFTs", jsonUsrl);
             let data = `https://skywalker.infura-ipfs.io/ipfs/${jsonUsrl}`;
             let Response = await axios.get(data);
             // console.log("Response", Response.data.properties.name.description);
@@ -153,7 +155,7 @@ export default function User_Registration() {
             let finalUrl;
             let Block_chain = Response.data.properties.category.chain;
             let description = Response.data.properties.description.description;
-            console.log("description",description);
+            console.log("description", description);
 
             imageArray = [
               ...imageArray,
@@ -176,10 +178,13 @@ export default function User_Registration() {
 
             setCollectionArray(imageArray);
           }
+          setLoading_Spinner(false);
           // }
         }
       }
     } catch (error) {
+      setLoading_Spinner(false);
+
       console.log(error);
     }
   };
@@ -190,9 +195,9 @@ export default function User_Registration() {
     document.getElementById("root").classList.add("bg-complete");
 
     return () => {
-        document.getElementById("root").classList.remove("bg-complete");
+      document.getElementById("root").classList.remove("bg-complete");
     };
-  }, [address,chainId]);
+  }, [address, chainId]);
 
   const webSupply = new Web3("https://bsc-mainnet.public.blastapi.io");
   const makeOffer = async (id, items) => {
@@ -256,7 +261,6 @@ export default function User_Registration() {
           let value = getOfferPrice * 1000000000000000000;
           setTimeout(() => {
             const makeOffer = async () => {
-              
               try {
                 const { request } = await prepareWriteContract({
                   address:
@@ -367,8 +371,14 @@ export default function User_Registration() {
                     category: items.category,
                     edate: new Date(),
                     Description: items.description,
-                    isOnAuction: user_Profile?.username == undefined ? address : user_Profile?.username ,
-                    bidEndTime: user_Profile?.image == undefined ? "./images/Avtat.png" : user_Profile?.image || "./images/Avtat.png",  
+                    isOnAuction:
+                      user_Profile?.username == undefined
+                        ? address
+                        : user_Profile?.username,
+                    bidEndTime:
+                      user_Profile?.image == undefined
+                        ? "./images/Avtat.png"
+                        : user_Profile?.image || "./images/Avtat.png",
                     Blockchain:
                       chainId == 97
                         ? "Binance"
@@ -436,7 +446,8 @@ export default function User_Registration() {
   useEffect(() => {
     const get_user_NFt_Balance = async () => {
       try {
-       
+        setLoading_Spinner(true);
+
         let contract = null;
         contract = new webSupply_BNB.eth.Contract(
           Contract_Addresss[0].CreateNFT_ABI,
@@ -460,7 +471,7 @@ export default function User_Registration() {
         let Ethereum_value = await contract_Ether.methods
           .balanceOf(address)
           .call();
-         Ethereum_value = parseInt(Ethereum_value).toString();
+        Ethereum_value = parseInt(Ethereum_value).toString();
         setethereumchain(parseInt(Ethereum_value));
 
         let polygon_value = await contract_Polygon.methods
@@ -468,6 +479,7 @@ export default function User_Registration() {
           .call();
         // polygon_value = parseInt(polygon_value).toString();
         setpolygonchain(parseInt(polygon_value));
+        setLoading_Spinner(false);
 
         // let BNB_balace = await readContract({
         //   address: Contract_Addresss[0].CreateNFT,
@@ -505,6 +517,7 @@ export default function User_Registration() {
         // setpolygonchain(polygon_value);
       } catch (error) {
         console.log(error);
+        setLoading_Spinner(false);
       }
     };
 
@@ -525,14 +538,13 @@ export default function User_Registration() {
       {IsSpinner ? <FullScreenLoader heading="loading" /> : null}
       <main className="pt-[5.5rem] lg:mt-18">
         {/* Banner */}
-        {
-          console.log("user_Profile.Cover_image ",user_Profile.Cover_image )
-        }
+
         <div className="relative">
           <img
             src={
               Object.keys(user_Profile).length != 0
-                ? user_Profile.Cover_image !== "" && user_Profile.Cover_image !== undefined
+                ? user_Profile.Cover_image !== "" &&
+                  user_Profile.Cover_image !== undefined
                   ? `${user_Profile?.Cover_image}` ||
                     "images/user_profile_placeholder.webp"
                   : "images/user_profile_placeholder.webp"
@@ -547,21 +559,23 @@ export default function User_Registration() {
         {/* Profile */}
         <section className="relative pb-12 pt-28">
           {/* Avatar */}
-        
+
           <div className="absolute left-1/2 top-0 z-10 flex -translate-x-1/2 -translate-y-1/2 items-center justify-center">
             <figure className="relative">
               <img
                 src={
                   Object.keys(user_Profile).length != 0
-                    ? user_Profile?.image !== "" &&  user_Profile.Cover_image !== undefined
-                      ? `${user_Profile?.image}` || "images/profile_placeholder.webp"
+                    ? user_Profile?.image !== "" &&
+                      user_Profile.Cover_image !== undefined
+                      ? `${user_Profile?.image}` ||
+                        "images/profile_placeholder.webp"
                       : "images/profile_placeholder.webp"
                     : "images/profile_placeholder.webp"
                 }
                 alt="collection avatar"
                 className="object-cover rounded"
                 width="100%"
-                style={{objectPosition: "center top", height: "30vh"}}
+                style={{ objectPosition: "center top", height: "30vh" }}
               />
               {/* <div
                 className="absolute -right-3 bottom-0 flex h-6 w-6 items-center justify-center rounded-full border-2 border-white bg-green dark:border-jacarta-600"
@@ -587,25 +601,36 @@ export default function User_Registration() {
                   ? user_Profile?.username
                   : "UserName"}
               </h2>
-              <div className="mb-8 inline-flex items-center justify-center py-1.5 px-4" style={{background: "#030B3C", border: "1px solid #131DFF", borderRadius: "8px"}}>
+              <div
+                className="mb-8 inline-flex items-center justify-center py-1.5 px-4"
+                style={{
+                  background: "#030B3C",
+                  border: "1px solid #131DFF",
+                  borderRadius: "8px",
+                }}
+              >
                 <button
                   className="js-copy-clipboard max-w-[10rem] select-none overflow-hidden text-ellipsis whitespace-nowrap"
                   data-tippy-content="Copy"
                 >
+                 
+           
                   <span className=" text-white">
                     <CopyToClipboard
-                      text={user_Profile?.address}
+                      text={ Object.keys(user_Profile).length != 0
+                        ? user_Profile?.address
+                        :  address}
                       onCopy={() => setcopied(true)}
                     >
                       <span>
-                        {user_Profile !== null
-                          ? user_Profile?.address
-                          : "0x23922cdFa9616A9c5175C0c08f1fc660924eeBdE"}
+                        { Object.keys(user_Profile).length != 0
+                          ? user_Profile?.address .substring(0, 4) + "..." + user_Profile?.address .trim()?.substring(user_Profile?.address .length -4)
+                          :  address.substring(0, 4) + "..." + address.trim()?.substring(address.length -4)}
                       </span>
                     </CopyToClipboard>
                     {copied ? toast.success("Copied") : null}
                   </span>
-                  f
+                  
                 </button>
               </div>
               <p className="mx-auto mb-2 max-w-xl text-white text-md">
@@ -628,24 +653,28 @@ export default function User_Registration() {
             <div>
               <div className="innerdiv_chains mb-4">
                 <h5 className="mb-3 mb-md-0 d-flex text-white align-items-center">
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  viewBox="0 0 24 24"
-                  width={24}
-                  height={24}
-                  className="mr-3 transition-colors"
-                  style={{fill: "#ffffff"}}
-                >
-                  <path fill="none" d="M0 0h24v24H0z" />
-                  <path d="M7 5V2a1 1 0 0 1 1-1h8a1 1 0 0 1 1 1v3h4a1 1 0 0 1 1 1v14a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1V6a1 1 0 0 1 1-1h4zm2 8H4v6h16v-6h-5v3H9v-3zm11-6H4v4h5V9h6v2h5V7zm-9 4v3h2v-3h-2zM9 3v2h6V3H9z" />
-                </svg>
-
-                  Your NFT's on all chains</h5>
-                <div className="all_chain_icons" >
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    viewBox="0 0 24 24"
+                    width={24}
+                    height={24}
+                    className="mr-3 transition-colors"
+                    style={{ fill: "#ffffff" }}
+                  >
+                    <path fill="none" d="M0 0h24v24H0z" />
+                    <path d="M7 5V2a1 1 0 0 1 1-1h8a1 1 0 0 1 1 1v3h4a1 1 0 0 1 1 1v14a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1V6a1 1 0 0 1 1-1h4zm2 8H4v6h16v-6h-5v3H9v-3zm11-6H4v4h5V9h6v2h5V7zm-9 4v3h2v-3h-2zM9 3v2h6V3H9z" />
+                  </svg>
+                  Your NFT's on all chains
+                </h5>
+                <div className="all_chain_icons">
                   <div
                     className="chains_icons mx-2"
                     onClick={() => setselectChain("Ethereum")}
-                    style={{background: "#030B3C", border: "1px solid #131DFF", borderRadius: "8px"}}
+                    style={{
+                      background: "#030B3C",
+                      border: "1px solid #131DFF",
+                      borderRadius: "8px",
+                    }}
                   >
                     <img
                       src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyOCIgaGVpZ2h0PSIyOCIgZmlsbD0ibm9uZSI+PHBhdGggZmlsbD0iIzI1MjkyRSIgZmlsbC1ydWxlPSJldmVub2RkIiBkPSJNMTQgMjhhMTQgMTQgMCAxIDAgMC0yOCAxNCAxNCAwIDAgMCAwIDI4WiIgY2xpcC1ydWxlPSJldmVub2RkIi8+PHBhdGggZmlsbD0idXJsKCNhKSIgZmlsbC1vcGFjaXR5PSIuMyIgZmlsbC1ydWxlPSJldmVub2RkIiBkPSJNMTQgMjhhMTQgMTQgMCAxIDAgMC0yOCAxNCAxNCAwIDAgMCAwIDI4WiIgY2xpcC1ydWxlPSJldmVub2RkIi8+PHBhdGggZmlsbD0idXJsKCNiKSIgZD0iTTguMTkgMTQuNzcgMTQgMTguMjFsNS44LTMuNDQtNS44IDguMTktNS44MS04LjE5WiIvPjxwYXRoIGZpbGw9IiNmZmYiIGQ9Im0xNCAxNi45My01LjgxLTMuNDRMMTQgNC4zNGw1LjgxIDkuMTVMMTQgMTYuOTNaIi8+PGRlZnM+PGxpbmVhckdyYWRpZW50IGlkPSJhIiB4MT0iMCIgeDI9IjE0IiB5MT0iMCIgeTI9IjI4IiBncmFkaWVudFVuaXRzPSJ1c2VyU3BhY2VPblVzZSI+PHN0b3Agc3RvcC1jb2xvcj0iI2ZmZiIvPjxzdG9wIG9mZnNldD0iMSIgc3RvcC1jb2xvcj0iI2ZmZiIgc3RvcC1vcGFjaXR5PSIwIi8+PC9saW5lYXJHcmFkaWVudD48bGluZWFyR3JhZGllbnQgaWQ9ImIiIHgxPSIxNCIgeDI9IjE0IiB5MT0iMTQuNzciIHkyPSIyMi45NiIgZ3JhZGllbnRVbml0cz0idXNlclNwYWNlT25Vc2UiPjxzdG9wIHN0b3AtY29sb3I9IiNmZmYiLz48c3RvcCBvZmZzZXQ9IjEiIHN0b3AtY29sb3I9IiNmZmYiIHN0b3Atb3BhY2l0eT0iLjkiLz48L2xpbmVhckdyYWRpZW50PjwvZGVmcz48L3N2Zz4K"
@@ -656,7 +685,11 @@ export default function User_Registration() {
                   <div
                     className="chains_icons mx-2"
                     onClick={() => setselectChain("Binance")}
-                    style={{background: "#030B3C", border: "1px solid #131DFF", borderRadius: "8px"}}
+                    style={{
+                      background: "#030B3C",
+                      border: "1px solid #131DFF",
+                      borderRadius: "8px",
+                    }}
                   >
                     <img
                       src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyOCIgaGVpZ2h0PSIyOCIgZmlsbD0ibm9uZSI+PGcgY2xpcC1wYXRoPSJ1cmwoI2EpIj48cGF0aCBmaWxsPSIjRjBCOTBCIiBmaWxsLXJ1bGU9ImV2ZW5vZGQiIGQ9Ik0xNCAwYzcuNzMzIDAgMTQgNi4yNjcgMTQgMTRzLTYuMjY3IDE0LTE0IDE0UzAgMjEuNzMzIDAgMTQgNi4yNjcgMCAxNCAwWiIgY2xpcC1ydWxlPSJldmVub2RkIi8+PHBhdGggZmlsbD0iI2ZmZiIgZD0ibTcuNjk0IDE0IC4wMSAzLjcwMiAzLjE0NiAxLjg1djIuMTY4bC00Ljk4Ni0yLjkyNHYtNS44NzhMNy42OTQgMTRabTAtMy43MDJ2Mi4xNTdsLTEuODMyLTEuMDgzVjkuMjE0bDEuODMyLTEuMDgzIDEuODQxIDEuMDgzLTEuODQgMS4wODRabTQuNDctMS4wODQgMS44MzItMS4wODMgMS44NCAxLjA4My0xLjg0IDEuMDg0LTEuODMyLTEuMDg0WiIvPjxwYXRoIGZpbGw9IiNmZmYiIGQ9Ik05LjAxOCAxNi45MzV2LTIuMTY4bDEuODMyIDEuMDg0djIuMTU3bC0xLjgzMi0xLjA3M1ptMy4xNDYgMy4zOTQgMS44MzIgMS4wODQgMS44NC0xLjA4NHYyLjE1N2wtMS44NCAxLjA4NC0xLjgzMi0xLjA4NFYyMC4zM1ptNi4zLTExLjExNSAxLjgzMi0xLjA4MyAxLjg0IDEuMDgzdjIuMTU4bC0xLjg0IDEuMDgzdi0yLjE1N2wtMS44MzItMS4wODRabTEuODMyIDguNDg4LjAxLTMuNzAyIDEuODMxLTEuMDg0djUuODc5bC00Ljk4NiAyLjkyNHYtMi4xNjdsMy4xNDUtMS44NVoiLz48cGF0aCBmaWxsPSIjZmZmIiBkPSJtMTguOTgyIDE2LjkzNS0xLjgzMiAxLjA3M3YtMi4xNTdsMS44MzItMS4wODR2Mi4xNjhaIi8+PHBhdGggZmlsbD0iI2ZmZiIgZD0ibTE4Ljk4MiAxMS4wNjUuMDEgMi4xNjgtMy4xNTUgMS44NXYzLjcxMmwtMS44MzEgMS4wNzMtMS44MzItMS4wNzN2LTMuNzExbC0zLjE1NS0xLjg1MXYtMi4xNjhsMS44NC0xLjA4MyAzLjEzNSAxLjg2IDMuMTU1LTEuODYgMS44NCAxLjA4M2gtLjAwN1ptLTkuOTY0LTMuNyA0Ljk3Ny0yLjkzNSA0Ljk4NyAyLjkzNS0xLjgzMiAxLjA4My0zLjE1NC0xLjg2LTMuMTQ2IDEuODYtMS44MzItMS4wODNaIi8+PC9nPjxkZWZzPjxjbGlwUGF0aCBpZD0iYSI+PHBhdGggZmlsbD0iI2ZmZiIgZD0iTTAgMGgyOHYyOEgweiIvPjwvY2xpcFBhdGg+PC9kZWZzPjwvc3ZnPg=="
@@ -667,7 +700,11 @@ export default function User_Registration() {
                   <div
                     className="chains_icons mx-2"
                     onClick={() => setselectChain("Polygon")}
-                    style={{background: "#030B3C", border: "1px solid #131DFF", borderRadius: "8px"}}
+                    style={{
+                      background: "#030B3C",
+                      border: "1px solid #131DFF",
+                      borderRadius: "8px",
+                    }}
                   >
                     <img
                       src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHhtbG5zOnhsaW5rPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5L3hsaW5rIiB3aWR0aD0iMjgiIGhlaWdodD0iMjgiPjxkZWZzPjxsaW5lYXJHcmFkaWVudCBpZD0iQSIgeDE9Ii0xOC4yNzUlIiB4Mj0iODQuOTU5JSIgeTE9IjguMjE5JSIgeTI9IjcxLjM5MyUiPjxzdG9wIG9mZnNldD0iMCUiIHN0b3AtY29sb3I9IiNhMjI5YzUiLz48c3RvcCBvZmZzZXQ9IjEwMCUiIHN0b3AtY29sb3I9IiM3YjNmZTQiLz48L2xpbmVhckdyYWRpZW50PjxjaXJjbGUgaWQ9IkIiIGN4PSIxNCIgY3k9IjE0IiByPSIxNCIvPjwvZGVmcz48ZyBmaWxsLXJ1bGU9ImV2ZW5vZGQiPjxtYXNrIGlkPSJDIiBmaWxsPSIjZmZmIj48dXNlIHhsaW5rOmhyZWY9IiNCIi8+PC9tYXNrPjxnIGZpbGwtcnVsZT0ibm9uemVybyI+PHBhdGggZmlsbD0idXJsKCNBKSIgZD0iTS0xLjMyNi0xLjMyNmgzMC42NTF2MzAuNjUxSC0xLjMyNnoiIG1hc2s9InVybCgjQykiLz48cGF0aCBmaWxsPSIjZmZmIiBkPSJNMTguMDQ5IDE3LjAyMWwzLjk2LTIuMjg3YS42ODEuNjgxIDAgMCAwIC4zNC0uNTg5VjkuNTcyYS42ODMuNjgzIDAgMCAwLS4zNC0uNTlsLTMuOTYtMi4yODZhLjY4Mi42ODIgMCAwIDAtLjY4IDBsLTMuOTYgMi4yODdhLjY4Mi42ODIgMCAwIDAtLjM0LjU4OXY4LjE3M0wxMC4yOSAxOS4zNWwtMi43NzctMS42MDR2LTMuMjA3bDIuNzc3LTEuNjA0IDEuODMyIDEuMDU4VjExLjg0bC0xLjQ5Mi0uODYxYS42ODEuNjgxIDAgMCAwLS42OCAwbC0zLjk2IDIuMjg3YS42ODEuNjgxIDAgMCAwLS4zNC41ODl2NC41NzNjMCAuMjQyLjEzLjQ2OC4zNC41OWwzLjk2IDIuMjg2YS42OC42OCAwIDAgMCAuNjggMGwzLjk2LTIuMjg2YS42ODIuNjgyIDAgMCAwIC4zNC0uNTg5di04LjE3NGwuMDUtLjAyOCAyLjcyOC0xLjU3NSAyLjc3NyAxLjYwM3YzLjIwOGwtMi43NzcgMS42MDMtMS44My0xLjA1NnYyLjE1MWwxLjQ5Ljg2YS42OC42OCAwIDAgMCAuNjggMHoiLz48L2c+PC9nPjwvc3ZnPg=="
@@ -711,7 +748,7 @@ export default function User_Registration() {
                   </div>
                 </div> */}
 
-                {_DATA.currentData()?.length == 0 ? (
+                {Loading_Spinner == true && _DATA.currentData()?.length == 0 ? (
                   <>
                     <>
                       <h6 className="fw-normal text-muted text-center mb-0">
@@ -720,13 +757,22 @@ export default function User_Registration() {
                       <Loader />
                     </>
                   </>
+                ) : Loading_Spinner == false &&
+                  _DATA.currentData()?.length == 0 ? (
+                  <>
+                    <div className="col-12">
+                      <NoDataAlert
+                        heading="There're no NFTs at the moment."
+                        subheading="Try to mint some assets to see how are we rendering them."
+                      />
+                    </div>
+                  </>
                 ) : (
                   <>
                     <div className="row mixitUpContainer gy-4 mb-5 align-items-stretch">
                       {
                         // selectChain !=null ? chainSort:
                         _DATA.currentData().map((items, index) => {
-                          
                           return (
                             <>
                               <div
@@ -742,15 +788,18 @@ export default function User_Registration() {
                                         className="text-reset"
                                         to={`/assets/${items.name}/${items.Block_chain}`}
                                       >
-                                        <p
-                                          className="fw-bold mb-0 w-100 px-2 cursor-pointer text-white text-md"
-                                        >
-                                          {items.name.length > 25 ? (items.name.substr(0, 25)+ '...') : (items.name) }
+                                        <p className="fw-bold mb-0 w-100 px-2 cursor-pointer text-white text-md">
+                                          {items.name.length > 25
+                                            ? items.name.substr(0, 25) + "..."
+                                            : items.name}
                                         </p>
                                       </Link>
                                     </div>
 
-                                    <div className="Blockchain" style={{right: "10px"}}>
+                                    <div
+                                      className="Blockchain"
+                                      style={{ right: "10px" }}
+                                    >
                                       <div className="inner_blockchain">
                                         {items.Block_chain == "Binance" ? (
                                           <SiBinance className="fa-brands fa-ethereum" />
@@ -777,7 +826,7 @@ export default function User_Registration() {
                                           <></>
                                         )}
                                       </div>
-                                    </div>  
+                                    </div>
 
                                     <div className="position-relative mb-2 shadow">
                                       {/* <div className="author z-index-20">
@@ -946,7 +995,18 @@ export default function User_Registration() {
                                     </div>
 
                                     {/* <NftCategory category={category} /> */}
-                                    <p className="text-white mb-2" style={{ backgroundColor: "#090E2D", fontSize: "14px", fontWeight: "bold", padding: "7px 10px", borderRadius: "8px", border: "1px solid #0F1953", boxShadow: "0 0 10px 5px #2c1cb5"}}>
+                                    <p
+                                      className="text-white mb-2"
+                                      style={{
+                                        backgroundColor: "#090E2D",
+                                        fontSize: "14px",
+                                        fontWeight: "bold",
+                                        padding: "7px 10px",
+                                        borderRadius: "8px",
+                                        border: "1px solid #0F1953",
+                                        boxShadow: "0 0 10px 5px #2c1cb5",
+                                      }}
+                                    >
                                       This is your item, you can put it on sale
                                     </p>
                                     <div
@@ -961,7 +1021,11 @@ export default function User_Registration() {
                                         onClick={() =>
                                           makeOffer(items?.token_id, items)
                                         }
-                                        style={{ background: "#1ADFBB", boxShadow: "0px 0px 10px 5px #4659CF77" }}
+                                        style={{
+                                          background: "#1ADFBB",
+                                          boxShadow:
+                                            "0px 0px 10px 5px #4659CF77",
+                                        }}
                                       >
                                         Offer
                                       </button>
@@ -980,7 +1044,12 @@ export default function User_Registration() {
                                         onChange={(e) =>
                                           setgetOfferPrice(e.target.value)
                                         }
-                                        style={{border: "1px solid #131DFF", borderRadius: "8px", background: "#070630", color: "white"}}
+                                        style={{
+                                          border: "1px solid #131DFF",
+                                          borderRadius: "8px",
+                                          background: "#070630",
+                                          color: "white",
+                                        }}
                                         // ref={priceRefs.current[nftKey]}
                                       />
                                     </div>
@@ -995,15 +1064,16 @@ export default function User_Registration() {
                                       </span>{" "}
                                       ago
                                     </p> */}
-                                    
+
                                     <p className="nft-text-mini d-flex align-items-center m-0">
                                       <span className="nft-icons-mini">
                                         <i className="las la-clock"></i>
                                       </span>
                                       <span className="ms-1 nft-text-mini">
-                                        Created {formatDate(items.created_date)}{" "} ago</span>
+                                        Created {formatDate(items.created_date)}{" "}
+                                        ago
+                                      </span>
                                     </p>
-
                                   </div>
                                 </div>
                               </div>

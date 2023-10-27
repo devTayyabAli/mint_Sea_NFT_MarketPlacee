@@ -61,7 +61,7 @@
     },
     "scripts": {
         "start": "set PORT=3006 && react-app-rewired start",
-        "build": "react-app-rewired --max-old-space-size=8192 build",
+        "build": "react-app-rewired --max_old_space_size=4096  build",
         "test": "react-app-rewired test",
         "eject": "react-app-rewired eject"
     },

@@ -23,7 +23,7 @@ import { getLoarem } from '../Redux/GetNFTs';
 function ItemSingle() {
 
   const { addToast } = useToasts();
-  const { id, chainid } = useParams();
+  const { id, chain_id } = useParams();
   const [MktIsLoading, setMktIsLoading] = useState(false);
   const [User_Probile, setUser_Probile] = useState([])
   const [ShowData, setShowData] = useState([])
@@ -34,8 +34,9 @@ function ItemSingle() {
   let history = useHistory()
   const getAllNFts = async () => {
     try {
+      console.log("ID",id);
       let res = await axios.get(
-        `https://sanjhavehra.womenempowerment.online/get_one_NFT?name=${id}&&chainid=${chainid}`
+        `https://sanjhavehra.womenempowerment.online/get_one_NFT?name=${id}&&chainid=${chain_id}`
       );
       console.log("getAllNFts", res.data.data);
       if (res.data.success == true) {
@@ -70,7 +71,7 @@ function ItemSingle() {
     getAllNFts()
     fetchData();
 
-  }, [id,address,chainid]);
+  }, [id,address,chain_id]);
 
 
 

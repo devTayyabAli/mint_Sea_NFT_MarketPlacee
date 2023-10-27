@@ -253,7 +253,7 @@ function Header({userFunds_ClaimAble,setUserFunds_ClaimAble}) {
 
                         <li className='nav-item nav-item ms-lg-2'>
 
-                            <ConnectButton chainStatus="icon" showBalance={{ smallScreen: false, largeScreen: true }} className='btn-transparent px-3 d-lg-flex align-items-center' />
+                            <ConnectButton chainStatus="icon" showBalance={{ smallScreen: false, largeScreen: false }} className='btn-transparent px-3 d-lg-flex align-items-center' />
                             {/* <ConnectWallet
                                 theme={"light"}
                                 modalTitle={"MintSea"}

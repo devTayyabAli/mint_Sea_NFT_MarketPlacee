@@ -200,11 +200,12 @@ export default function Edit_User_Profile() {
       <main className="pt-[5.5rem] lg:pt-18">
         {/* Banner */}
         <div className="relative">
+         
           <img
             src={
               getUserFile.bg_Image == null && getUserFile.bg_Image == undefined
                 ? Object.keys(user_Profile).length != 0
-                  ? user_Profile.Cover_image == ""
+                  ? user_Profile.Cover_image !== "" || user_Profile.Cover_image !== undefined
                     ? "images/user_profile_placeholder.webp"
                     : `${user_Profile?.Cover_image}` ||
                       "images/user_profile_placeholder.webp"
@@ -355,11 +356,12 @@ export default function Edit_User_Profile() {
                 <div className="row pt-5 mx-sm-2">
                   <form className="col-12 col-xl-6 shrink-0 text-center text-md-start">
                     <figure className="relative inline-block">
+                     
                       <img
                         src={
                           getUserFile.profile == null
                             ? Object.keys(user_Profile).length != 0
-                              ? user_Profile.image == ""
+                              ? user_Profile.image == "" || user_Profile.image == undefined
                                 ? "images/profile_placeholder.webp"
                                 : `${user_Profile?.image}`
                               : "images/profile_placeholder.webp"
