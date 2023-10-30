@@ -99,17 +99,16 @@ export default function User_Registration() {
           address,
           chain,
         });
-
         allNFTs.push(response.jsonResponse?.result);
+        console.log("response", response);
       }
 
-      // console.log("allNFTs", allNFTs[0]);
       let res = await Moralis.EvmApi.nft.getWalletNFTs({
         address,
         chain,
       });
 
-      // console.log("getWalletNFTs", res);
+      console.log("getWalletNFTs", res);
       res = res?.jsonResponse?.result;
 
       let name;
@@ -124,64 +123,71 @@ export default function User_Registration() {
       let count = 0;
       for (let j = 0; j < allNFTs.length; j++) {
         // console.log("UrlallNFTs", allNFTs[j]);
-        for (let i = 0; i < allNFTs[j].length; i++) {
-          let jsonUsrl = allNFTs[j][i].token_uri;
+        for (let i = 0; i < allNFTs[j]?.length; i++) {
+          let jsonUsrl = allNFTs[j][i]?.token_uri;
+
           Image_type = "image";
-          // console.log("Addressj", allNFTs[j][i].token_address.toUpperCase()==Contract_Addresss[0].CreateNFT.toUpperCase() || allNFTs[j][i].token_address.toUpperCase()==Contract_Addresss[1].CreateNFT.toUpperCase() || allNFTs[j][i].token_address.toUpperCase()==Contract_Addresss[2].CreateNFT.toUpperCase());
-          if (
-            allNFTs[j][i].token_address.toUpperCase() ==
-              Contract_Addresss[0].CreateNFT.toUpperCase() ||
-            allNFTs[j][i].token_address.toUpperCase() ==
-              Contract_Addresss[1].CreateNFT.toUpperCase() ||
-            allNFTs[j][i].token_address.toUpperCase() ==
-              Contract_Addresss[2].CreateNFT.toUpperCase()
-          ) {
-            // if(allNFTs[j][i].token_address=="0xF766Ad06a71C51B7dbbb2e3C717A52BD354155d2" || allNFTs[j][i].token_address=="0xb0EfbDd0826FB657Dbb5b10161EB0533EA6220Bf" || allNFTs[j][i].token_address=="0x58C7dC293906Afe7Ae4fC719Ae54DBB18DA73dE4" )
-            // {
-            console.log("allNFTsallNFTs", jsonUsrl);
-            let data = `https://skywalker.infura-ipfs.io/ipfs/${jsonUsrl}`;
-            let Response = await axios.get(data);
-            // console.log("Response", Response.data.properties.name.description);
-            jsonUsrl = `https://skywalker.infura-ipfs.io/ipfs/${Response.data.properties.image.description}`;
-            name = Response.data.properties.name.description;
-            category = Response.data.properties.category.description;
-            Image_type = Response.data.properties.image.type;
-            // console.log("Image_type", Image_type);
-            owner_of = allNFTs[j][i].owner_of;
-            token_address = allNFTs[j][i].token_address;
-            amount = allNFTs[j][i].amount;
-            created_date = allNFTs[j][i].last_token_uri_sync;
-            token_id = allNFTs[j][i].token_id;
-            let finalUrl;
-            let Block_chain = Response.data.properties.category.chain;
-            let description = Response.data.properties.description.description;
-            console.log("description", description);
+          if(jsonUsrl==undefined){
 
-            imageArray = [
-              ...imageArray,
-              {
-                url: finalUrl,
-                name: name,
-                owner_of: owner_of,
-                token_address: token_address,
-                amount: amount,
-                symbol: symbol,
-                token_id: token_id,
-                jsonUsrl: jsonUsrl,
-                created_date: created_date,
-                category: category,
-                Image_type: Image_type,
-                Block_chain: Block_chain,
-                description: description,
-              },
-            ];
+          }else{
 
-            setCollectionArray(imageArray);
+            if (
+              allNFTs[j][i].token_address.toUpperCase() ==
+                Contract_Addresss[0].CreateNFT.toUpperCase() ||
+              allNFTs[j][i].token_address.toUpperCase() ==
+                Contract_Addresss[1].CreateNFT.toUpperCase() ||
+              allNFTs[j][i].token_address.toUpperCase() ==
+                Contract_Addresss[2].CreateNFT.toUpperCase()
+            ) {
+              // if(allNFTs[j][i].token_address=="0xF766Ad06a71C51B7dbbb2e3C717A52BD354155d2" || allNFTs[j][i].token_address=="0xb0EfbDd0826FB657Dbb5b10161EB0533EA6220Bf" || allNFTs[j][i].token_address=="0x58C7dC293906Afe7Ae4fC719Ae54DBB18DA73dE4" )
+              // {
+            
+              let data = `https://skywalker.infura-ipfs.io/ipfs/${jsonUsrl}`;
+              let Response = await axios.get(data);
+              // console.log("Response", Response.data.properties.name.description);
+              jsonUsrl = `https://skywalker.infura-ipfs.io/ipfs/${Response.data.properties.image.description}`;
+              name = Response.data.properties.name.description;
+              category = Response.data.properties.category.description;
+              Image_type = Response.data.properties.image.type;
+              // console.log("Image_type", Image_type);
+              owner_of = allNFTs[j][i].owner_of;
+              token_address = allNFTs[j][i].token_address;
+              amount = allNFTs[j][i].amount;
+              created_date = allNFTs[j][i].last_token_uri_sync;
+              token_id = allNFTs[j][i].token_id;
+              let finalUrl;
+              let Block_chain = Response.data.properties.category.chain;
+              let description = Response.data.properties.description.description;
+              
+  
+              imageArray = [
+                ...imageArray,
+                {
+                  url: finalUrl,
+                  name: name,
+                  owner_of: owner_of,
+                  token_address: token_address,
+                  amount: amount,
+                  symbol: symbol,
+                  token_id: token_id,
+                  jsonUsrl: jsonUsrl,
+                  created_date: created_date,
+                  category: category,
+                  Image_type: Image_type,
+                  Block_chain: Block_chain,
+                  description: description,
+                },
+              ];
+  
+              setCollectionArray(imageArray);
+            }
           }
-          setLoading_Spinner(false);
+          // console.log("Addressj", allNFTs[j][i].token_address.toUpperCase()==Contract_Addresss[0].CreateNFT.toUpperCase() || allNFTs[j][i].token_address.toUpperCase()==Contract_Addresss[1].CreateNFT.toUpperCase() || allNFTs[j][i].token_address.toUpperCase()==Contract_Addresss[2].CreateNFT.toUpperCase());
+          
           // }
         }
       }
+      setLoading_Spinner(false);
     } catch (error) {
       setLoading_Spinner(false);
 
@@ -332,7 +338,7 @@ export default function User_Registration() {
                 let postapiPushdata = await axios.post(
                   "https://sanjhavehra.womenempowerment.online/open_marketplace",
                   {
-                    useraddress: address,
+                    
                     itemId: Offer,
                     nftContract: NFT_Addresss,
                     tokenId: id,
@@ -357,7 +363,7 @@ export default function User_Registration() {
 
                 let postapi = await axios.post(
                   "https://sanjhavehra.womenempowerment.online/trending_NFTs",
-                  {
+                  {    
                     useraddress: address,
                     itemId: Offer,
                     nftContract: NFT_Addresss,
@@ -446,7 +452,7 @@ export default function User_Registration() {
   useEffect(() => {
     const get_user_NFt_Balance = async () => {
       try {
-        setLoading_Spinner(true);
+        // setLoading_Spinner(true);
 
         let contract = null;
         contract = new webSupply_BNB.eth.Contract(
@@ -465,7 +471,7 @@ export default function User_Registration() {
         );
 
         const tx = await contract.methods.balanceOf(address).call();
-        let Claim_Amount = parseInt(tx).toString();
+    
         setBNB(parseInt(tx));
 
         let Ethereum_value = await contract_Ether.methods
@@ -479,7 +485,7 @@ export default function User_Registration() {
           .call();
         // polygon_value = parseInt(polygon_value).toString();
         setpolygonchain(parseInt(polygon_value));
-        setLoading_Spinner(false);
+        // setLoading_Spinner(false);
 
         // let BNB_balace = await readContract({
         //   address: Contract_Addresss[0].CreateNFT,
@@ -517,7 +523,7 @@ export default function User_Registration() {
         // setpolygonchain(polygon_value);
       } catch (error) {
         console.log(error);
-        setLoading_Spinner(false);
+        // setLoading_Spinner(false);
       }
     };
 
@@ -747,6 +753,7 @@ export default function User_Registration() {
                     </div>
                   </div>
                 </div> */}
+                
 
                 {Loading_Spinner == true && _DATA.currentData()?.length == 0 ? (
                   <>
@@ -758,7 +765,7 @@ export default function User_Registration() {
                     </>
                   </>
                 ) : Loading_Spinner == false &&
-                  _DATA.currentData()?.length == 0 ? (
+                CollectionArray?.length == 0 ? (
                   <>
                     <div className="col-12">
                       <NoDataAlert

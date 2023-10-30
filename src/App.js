@@ -123,7 +123,7 @@ function App() {
                 }
             }
         }
-        getCahinId()
+        // getCahinId()
         // const loadBlockchainData = async () => {
         //     try {
 
@@ -225,22 +225,25 @@ function App() {
     useEffect(() => {
         const claim_Able = async () => {
             try {
-                let provider = new ethers.providers.Web3Provider(window.ethereum);
-                let signer = provider.getSigner()
-                let contract = null
-                if (chainId == 97) {
-                    contract = new Contract(Contract_Addresss[0].nftMarketContractAddress, Contract_Addresss[0].nftMarketContractAddress_Abi, signer);
-                } else if (chainId == 11155111) {
-                    contract = new Contract(Contract_Addresss[1].nftMarketContractAddress, Contract_Addresss[1].nftMarketContractAddress_Abi, signer);
-                } else {
-                    contract = new Contract(Contract_Addresss[2].nftMarketContractAddress, Contract_Addresss[2].nftMarketContractAddress_Abi, signer);
+                if(address){
+
+                    let provider = new ethers.providers.Web3Provider(window.ethereum);
+                    let signer = provider.getSigner()
+                    let contract = null
+                    if (chainId == 97) {
+                        contract = new Contract(Contract_Addresss[0].nftMarketContractAddress, Contract_Addresss[0].nftMarketContractAddress_Abi, signer);
+                    } else if (chainId == 11155111) {
+                        contract = new Contract(Contract_Addresss[1].nftMarketContractAddress, Contract_Addresss[1].nftMarketContractAddress_Abi, signer);
+                    } else {
+                        contract = new Contract(Contract_Addresss[2].nftMarketContractAddress, Contract_Addresss[2].nftMarketContractAddress_Abi, signer);
+                    }
+                    const tx = await contract.userFunds(address)
+                    let Claim_Amount = parseInt(tx).toString()
+                    // Claim_Amount = webSupply.utils.fromWei(Claim_Amount.toString())
+                    Claim_Amount = Claim_Amount / 1000000000000000000
+                    // console.log("claim_Able", Claim_Amount);
+                    setUserFunds_ClaimAble(Claim_Amount)
                 }
-                const tx = await contract.userFunds(address)
-                let Claim_Amount = parseInt(tx).toString()
-                // Claim_Amount = webSupply.utils.fromWei(Claim_Amount.toString())
-                Claim_Amount = Claim_Amount / 1000000000000000000
-                // console.log("claim_Able", Claim_Amount);
-                setUserFunds_ClaimAble(Claim_Amount)
 
             } catch (error) {
                 console.log(error);
@@ -271,9 +274,10 @@ function App() {
         <div className='container-xxxl'>
             <BrowserRouter>
                 <Toaster />
-                {noMetaMask && <NoMetaMaskAlert />}
-                {!noContract && <Header userFunds_ClaimAble={userFunds_ClaimAble} setUserFunds_ClaimAble={setUserFunds_ClaimAble} />}
-                {noContract ? <NoContractAlert network={networkType} /> : null}
+                <Header userFunds_ClaimAble={userFunds_ClaimAble} setUserFunds_ClaimAble={setUserFunds_ClaimAble} />
+                {/* {noMetaMask && <NoMetaMaskAlert />} */}
+                {/* {!noContract && <Header userFunds_ClaimAble={userFunds_ClaimAble} setUserFunds_ClaimAble={setUserFunds_ClaimAble} />} */}
+                {/* {noContract ? <NoContractAlert network={networkType} /> : null} */}
                 <ScrollToTop>
                     <Switch>
                         <Route path='/' exact>

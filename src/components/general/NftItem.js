@@ -5,39 +5,27 @@ import React, {
   useState,
   useEffect,
 } from "react";
-import { Jazzicon } from "@ukstv/jazzicon-react";
-import { Link, useHistory } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { useToasts } from "react-toast-notifications";
-import web3 from "../../connection/web3";
-import Web3Context from "../../store/web3-context";
+
 import CollectionContext from "../../store/collection-context";
-import MarketplaceContext from "../../store/marketplace-context";
 
 import { formatDate } from "../../helpers/utils";
 import NftCategory from "./NftCategory";
-import useWeb3 from "../Components/useWeb3";
 import { SiBinance } from "react-icons/si";
 import { FaEthereum } from "react-icons/fa";
-import { toHex } from "../../Utils/utils";
 import { useDispatch, useSelector } from "react-redux";
 import {
   prepareWriteContract,
   waitForTransaction,
   writeContract,
 } from "@wagmi/core";
-import { Contract, errors, ethers } from "ethers";
 import { readContract } from "@wagmi/core";
-import {
-  Contract_Addresss,
-  nftMarketContractAddress,
-  nftMarketContractAddress_Abi,
-} from "../../Utils/Contract";
+import { Contract_Addresss } from "../../Utils/Contract";
 import FullScreenLoader from "./FullScreenLoader";
-import { API } from "../../API";
+
 import { useAccount, useChainId } from "wagmi";
-import { useAddress } from "@thirdweb-dev/react";
 import Web3 from "web3";
-import { API_URL } from "../../config";
 import axios from "axios";
 import { MdFavorite, MdFavoriteBorder } from "react-icons/md";
 import { toast } from "react-hot-toast";
@@ -46,38 +34,22 @@ import "./App.css";
 import { getLoarem } from "../../Redux/GetNFTs";
 import { getTranding } from "../../Redux/tranding_NFTs";
 
-const label = { inputProps: { "aria-label": "Checkbox demo" } };
-
-function NftItem({
-  NFT,
-  img,
-  title,
-  owner,
-  price,
-  category,
-  dateCreated,
-  id,
-  index,
-  nftKey,
-}) {
-  const web3Ctx = useContext(Web3Context);
-  const { web3, walletAddress } = useWeb3();
-  const count = useSelector((state) => state.counter.chain_Id);
-  const Offers_Loader = useSelector((state) => state.Offers.Offers_Array);
+function NftItem({ NFT, title, category, nftKey }) {
   const dispatch = useDispatch();
   const collectionCtx = useContext(CollectionContext);
   const [IsFavorite, setIsFavorite] = useState(false);
-  const marketplaceCtx = useContext(MarketplaceContext);
+
   const [MktIsLoading, setMktIsLoading] = useState(false);
   const [favrouteName, setfavrouteName] = useState(null);
   const chainId = useChainId();
   const { address } = useAccount();
   const { addToast } = useToasts();
-  const history = useHistory();
+  const [owner_Data, setOwner_Data] = useState([]);
+
   const priceRefs = useRef([]);
   const vidRef = useRef(null);
   const vidButtonRef = useRef(null);
-  const { data, isError, isLoading } = useBalance({
+  const { data } = useBalance({
     address: address,
   });
   const user_Profile = useSelector((state) => state.Offers.user_Profile);
@@ -101,33 +73,6 @@ function NftItem({
       .fill()
       .map((_, i) => priceRefs.current[i] || createRef());
   }
-
-  const makeOfferHandler = (event, id, nftKey) => {
-    event.preventDefault();
-
-    const enteredPrice = web3.utils.toWei(
-      priceRefs.current[nftKey].current.value,
-      "ether"
-    );
-
-    collectionCtx.contract.methods
-      .approve(marketplaceCtx.contract.options.address, id)
-      .send({ from: web3Ctx.account })
-      .on("transactionHash", (hash) => {
-        marketplaceCtx.setMktIsLoading(true);
-      })
-      .on("receipt", (receipt) => {
-        marketplaceCtx.contract.methods
-          .makeOffer(id, enteredPrice)
-          .send({ from: web3Ctx.account })
-          .on("error", (error) => {
-            addToast("Something went wrong when pushing to the blockchain", {
-              appearance: "error",
-            });
-            marketplaceCtx.setMktIsLoading(false);
-          });
-      });
-  };
 
   const detect_Offer_card = async () => {
     try {
@@ -251,7 +196,6 @@ function NftItem({
             let postapiPushdata = await axios.post(
               "https://sanjhavehra.womenempowerment.online/open_marketplace",
               {
-                useraddress: address,
                 itemId: "01000000000000000",
                 nftContract:
                   chainId == 97
@@ -271,8 +215,15 @@ function NftItem({
                 category: NFT.category,
                 edate: NFT.edate,
                 Blockchain: NFT.Blockchain,
-                Owner_Name: user_Profile?.username,
-                Owner_Image: user_Profile?.image,
+                Owner_Name:
+                  user_Profile?.username == undefined
+                    ? address
+                    : user_Profile?.username,
+                Owner_Image:
+                  user_Profile?.image == undefined
+                    ? "./images/Avtat.png"
+                    : user_Profile?.image || "./images/Avtat.png",
+                ownerAddress: address,
               }
             );
             addToast("You Buy This NFT SuccessFully!", {
@@ -365,7 +316,6 @@ function NftItem({
           let postapiPushdata = await axios.post(
             "https://sanjhavehra.womenempowerment.online/open_marketplace",
             {
-              useraddress: address,
               itemId: "01000000000000000",
               nftContract:
                 chainId == 97
@@ -421,7 +371,6 @@ function NftItem({
         let res = await axios.post(
           "https://sanjhavehra.womenempowerment.online/Add_Favorite",
           {
-            useraddress: address,
             itemId: NFT.itemId,
             nftContract: NFT.nftContract,
             tokenId: NFT.tokenId,
@@ -491,6 +440,36 @@ function NftItem({
     get_Favorite();
   }, [favrouteName]);
 
+  const fetchData = async () => {
+    if (NFT?.Owner_Address) {
+      let res = await axios.get(
+        `https://sanjhavehra.womenempowerment.online/get_user_profile?address=${NFT?.Owner_Address?.toUpperCase()}`
+      );
+
+      if (res?.data.success == false) {
+        // history("/Create_User_profile");
+      } else {
+        // console.log("OwnerAddress", res?.data?.data?.image);
+        setOwner_Data(res?.data?.data);
+      }
+    } else {
+      let res = await axios.get(
+        `https://sanjhavehra.womenempowerment.online/get_user_profile?address=${NFT?.useraddress?.toUpperCase()}`
+      );
+
+      if (res?.data.success == false) {
+        // history("/Create_User_profile");
+      } else {
+        // console.log("CreaterAddress", res?.data?.data?.image);
+        setOwner_Data(res?.data?.data);
+      }
+    }
+  };
+
+  useEffect(() => {
+    fetchData();
+  }, [address, NFT]);
+
   return (
     <>
       <div className={`card top-saller-Card  ${category}`}>
@@ -499,7 +478,9 @@ function NftItem({
           {/* <div className="position-relative mb-2 shadow"> */}
           <div className="z-index-20  mb-2 d-flex align-items-center">
             <div className="rounded-circle">
-              { NFT.Owner_Image !== null && NFT.Owner_Image !==undefined && NFT.Owner_Image !==""   ? (
+              {/* {NFT.Owner_Image !== null &&
+              NFT.Owner_Image !== undefined &&
+              NFT.Owner_Image !== "" ? (
                 <>
                   <img
                     src={
@@ -530,7 +511,37 @@ function NftItem({
                     }}
                     alt=""
                   />
-                  {/* <Jazzicon address={NFT.owner} /> */}
+                
+                </>
+              )} */}
+
+              {owner_Data.length == 0 ? (
+                <>
+                  <img
+                    src="./images/Avtat.png"
+                    style={{
+                      borderRadius: "50%",
+                      width: "2rem",
+                      height: "2rem",
+                    }}
+                    alt=""
+                  />
+                </>
+              ) : (
+                <>
+                  <img
+                    src={
+                      owner_Data.image==undefined ? 
+                      "./images/Avtat.png":
+                      
+                      `${owner_Data.image}` || "./images/Avtat.png"}
+                    style={{
+                      borderRadius: "50%",
+                      width: "2rem",
+                      height: "2rem",
+                    }}
+                    alt=""
+                  />
                 </>
               )}
             </div>

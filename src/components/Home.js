@@ -250,6 +250,9 @@ function Home({ topSellers }) {
                         </div>
                     ) :
                         <>
+                        {/* {
+                            console.log("Test",Math.max(ShowData.filter((element) => element.price == "01000000000000000").length - 10))
+                        } */}
 
                             <Swiper
                                 spaceBetween={30}
@@ -264,17 +267,11 @@ function Home({ topSellers }) {
                             >
                                 {
 
-                                    AllNFTS.data.data.filter((element) => element.price == "01000000000000000").slice(Math.max(ShowData.filter((element) => element.price == "01000000000000000").length - 10, 10)).reverse().map((NFT, key) => {
-                                        const index = marketplaceCtx.offers
-                                            ? marketplaceCtx.offers.findIndex((offer) => offer.id === NFT.id)
-                                            : -1;
-                                        const owner = index === -1 ? NFT.owner : marketplaceCtx.offers[index].user;
-                                        const price =
-                                            index !== -1 ? formatPrice(marketplaceCtx.offers[index].price).toFixed(2) : null;
-
+                                    AllNFTS.data.data.filter((element) => element.price == "01000000000000000").slice(-10).reverse().map((NFT, key) => {
+                                       
                                         return (
                                             <SwiperSlide key={key}>
-                                                <NftItem {...NFT} NFT={NFT} index={index} owner={owner} price={NFT.price} nftKey={key} />
+                                                <NftItem {...NFT} NFT={NFT}  nftKey={key} />
 
                                             </SwiperSlide>
                                         );
@@ -412,7 +409,8 @@ function Home({ topSellers }) {
                                 }}
                                 navigation={Boolean(ShowData.length !== 0)}
                             >
-                                {AllNFTS?.data?.data.filter((element) => element.price != "01000000000000000").slice(Math.max(ShowData.filter((element) => element.price != "01000000000000000").length - 20, 0)).reverse().map((NFT, key) => {
+                                {/* Math.max(ShowData.filter((element) => element.price != "01000000000000000").length - 20, 0) */}
+                                {AllNFTS?.data?.data.filter((element) => element.price != "01000000000000000").slice(-10).reverse().map((NFT, key) => {
                                     // console.log("Show_items",NFT.price);
                                     const index = marketplaceCtx.offers
                                         ? marketplaceCtx.offers.findIndex((offer) => offer.id === NFT.id)

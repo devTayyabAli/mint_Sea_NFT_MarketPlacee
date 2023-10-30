@@ -34,11 +34,11 @@ function ItemSingle() {
   let history = useHistory()
   const getAllNFts = async () => {
     try {
-      console.log("ID",id);
+     
       let res = await axios.get(
         `https://sanjhavehra.womenempowerment.online/get_one_NFT?name=${id}&&chainid=${chain_id}`
       );
-      console.log("getAllNFts", res.data.data);
+      // console.log("getAllNFts", res.data.data);
       if (res.data.success == true) {
         setShowData(res.data.data)
         // console.log("getAllNFts", res?.data?.data);
@@ -161,7 +161,7 @@ function ItemSingle() {
           })
           console.log("get_Favorite", update_Favorite.data);
           let postapiPushdata = await axios.post("https://sanjhavehra.womenempowerment.online/open_marketplace", {
-            useraddress: address,
+           
             itemId: "01000000000000000",
             nftContract: chainId == 97 ? Contract_Addresss[0].CreateNFT : chainId == 11155111 ? Contract_Addresss[1].CreateNFT : Contract_Addresss[2].CreateNFT,
             tokenId: "01000000000000000",
@@ -176,6 +176,7 @@ function ItemSingle() {
             Blockchain: ShowData?.Blockchain,
             Owner_Name:User_Probile?.username == undefined ? address : User_Probile?.username,
             Owner_Image:User_Probile?.image == undefined ? "./images/Avtat.png" : User_Probile?.image || "./images/Avtat.png",
+            ownerAddress:address
           });
           console.log("postapiPushdata",postapiPushdata);
           addToast("You Buy This NFT SuccessFully!", {
@@ -284,7 +285,7 @@ function ItemSingle() {
             tokenId: ShowData.tokenId
           })
           let postapiPushdata = await axios.post("https://sanjhavehra.womenempowerment.online/open_marketplace", {
-            useraddress: address,
+           
             itemId: "01000000000000000",
             nftContract: chainId == 97 ? Contract_Addresss[0].CreateNFT : chainId == 11155111 ? Contract_Addresss[1].CreateNFT : Contract_Addresss[2].CreateNFT,
             tokenId: "01000000000000000",

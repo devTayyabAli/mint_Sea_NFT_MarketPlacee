@@ -205,7 +205,7 @@ export default function Edit_User_Profile() {
             src={
               getUserFile.bg_Image == null && getUserFile.bg_Image == undefined
                 ? Object.keys(user_Profile).length != 0
-                  ? user_Profile.Cover_image !== "" || user_Profile.Cover_image !== undefined
+                  ? user_Profile.Cover_image == "" || user_Profile.Cover_image == undefined
                     ? "images/user_profile_placeholder.webp"
                     : `${user_Profile?.Cover_image}` ||
                       "images/user_profile_placeholder.webp"
@@ -213,6 +213,8 @@ export default function Edit_User_Profile() {
                 : URL.createObjectURL(getUserFile.bg_Image) ||
                   "images/user_profile_placeholder.webp"
             }
+
+           
             alt="banner"
             className="h-80 object-cover"
             width="100%"

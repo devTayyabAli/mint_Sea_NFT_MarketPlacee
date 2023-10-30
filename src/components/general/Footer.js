@@ -6,14 +6,17 @@ import { setCategory } from "../../Redux/Load_offers";
 import { useState } from "react";
 import toast from "react-hot-toast";
 import axios from "axios";
+import { useAccount } from "wagmi";
+import { useToasts } from "react-toast-notifications";
 
 function Footer() {
   // const [state, handleSubmit] = useForm("xlezgplp");
   const [getNewsletter, setgetNewsletter] = useState("")
   const [spinner, setSpinner] = useState(false)
+  const { address } = useAccount();
 
   let dispatch = useDispatch();
-
+  const { addToast } = useToasts();
   const handleSubmit = async () => {
     try {
       if (getNewsletter == "") {
@@ -41,6 +44,8 @@ function Footer() {
 
     }
   }
+
+  
 
 
   return (
@@ -114,9 +119,24 @@ function Footer() {
                   </NavLink>
                 </li>
                 <li className="mb-1">
-                  <NavLink className="text-sm text-reset" to="/User_Collection">
-                    Collection
-                  </NavLink>
+                  {
+                    address ? <>
+
+                      <NavLink className="text-sm text-reset" to="/User_Collection">
+                        Collection
+                      </NavLink>
+                    </>
+                      :
+                      <>
+                        <div className="text-sm text-reset" style={{cursor:"pointer"}} onClick={()=>
+                         addToast(`Please Connect Wallet First!`, {
+                          appearance: "error",
+                        })
+                        }   >
+                          Collection
+                        </div>  
+                      </>
+                  }
                 </li>
               </ul>
             </div>
@@ -155,31 +175,31 @@ function Footer() {
                 Subscribe to our newsletter to get updates regarding all NFTs and
                 the marketplace.
               </p>
-       
-                <div className="input-group shadow-sm bg-body rounded-sm">
-                  <input
-                    className="form-control border-0 bg-none shadow-0"
-                    type="email"
-                    name="email"
-                    autoComplete="off"
-                    placeholder="Enter your email address..."
-                    onChange={(e) => setgetNewsletter(e.target.value)}
-                  />
-                  <button className="btn btn-primary btn-sm" type="submit" onClick={handleSubmit}>
-                    {
-                      spinner ?
-                        <>
-                          <div class="spinner-border" role="status">
-                            <span class="visually-hidden">Loading...</span>
-                          </div>
-                        </>
-                        :
-                        <i className='las la-paper-plane'></i>
-                    }
 
-                  </button>
-                </div>
-          
+              <div className="input-group shadow-sm bg-body rounded-sm">
+                <input
+                  className="form-control border-0 bg-none shadow-0"
+                  type="email"
+                  name="email"
+                  autoComplete="off"
+                  placeholder="Enter your email address..."
+                  onChange={(e) => setgetNewsletter(e.target.value)}
+                />
+                <button className="btn btn-primary btn-sm" type="submit" onClick={handleSubmit}>
+                  {
+                    spinner ?
+                      <>
+                        <div class="spinner-border" role="status">
+                          <span class="visually-hidden">Loading...</span>
+                        </div>
+                      </>
+                      :
+                      <i className='las la-paper-plane'></i>
+                  }
+
+                </button>
+              </div>
+
               {getNewsletter == true ? (
                 <p className='bg-primary text-white mt-1 px-3 py-1  rounded-sm'>Thanks!</p>
               ) : null
@@ -257,13 +277,25 @@ function Footer() {
                           </NavLink>
                         </li>
                         <li className="mb-1">
-                          <NavLink
-                            className="text-sm text-reset"
-                            to="/User_Collection"
-                          >
-                            Collection
-                          </NavLink>
-                        </li>
+                  {
+                    address ? <>
+
+                      <NavLink className="text-sm text-reset" to="/User_Collection">
+                        Collection
+                      </NavLink>
+                    </>
+                      :
+                      <>
+                        <div className="text-sm text-reset" style={{cursor:"pointer"}} onClick={()=>
+                         addToast(`Please Connect Wallet First!`, {
+                          appearance: "error",
+                        })
+                        }   >
+                          Collection
+                        </div>  
+                      </>
+                  }
+                </li>
                       </ul>
                     </div>
                   </div>
