@@ -100,7 +100,7 @@ export default function User_Registration() {
           chain,
         });
         allNFTs.push(response.jsonResponse?.result);
-        console.log("response", response);
+       
       }
 
       let res = await Moralis.EvmApi.nft.getWalletNFTs({
@@ -108,7 +108,7 @@ export default function User_Registration() {
         chain,
       });
 
-      console.log("getWalletNFTs", res);
+     
       res = res?.jsonResponse?.result;
 
       let name;
@@ -331,7 +331,7 @@ export default function User_Registration() {
                   functionName: "offers",
                   args: [OfferCount],
                 });
-                // let Offer = await nftContract.offers(OfferCount);
+      
                 Offer = parseInt(Offer);
                 console.log("Offer", Offer);
 

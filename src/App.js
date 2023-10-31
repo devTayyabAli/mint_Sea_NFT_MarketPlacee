@@ -54,6 +54,9 @@ import { getLoarem } from './Redux/GetNFTs';
 import { getTranding } from './Redux/tranding_NFTs';
 import io from 'socket.io-client';
 import { Contract, ethers } from 'ethers';
+
+import { readContract } from "@wagmi/core";
+
 const socket = io('https://sanjhavehra.womenempowerment.online/');
 
 
@@ -63,7 +66,7 @@ function App() {
     const marketplaceCtx = useContext(MarketplaceContext);
     const [networkType, setNetworkType] = useState(null);
     const [topSellers, setTopSellers] = useState([]);
-    const { setFilter_ShowData,web3,walletAddress,setSpinner,setShowData } = useWeb3();
+    const { setFilter_ShowData, web3, walletAddress, setSpinner, setShowData } = useWeb3();
     let Category_All = useSelector((state) => state.Offers.Category)
     const { address } = useAccount();
     const chainId = useChainId();
@@ -147,7 +150,7 @@ function App() {
 
         // }
         // loadBlockchainData()
-    }, [address,chainId]);
+    }, [address, chainId]);
     const fetchData = async () => {
         if (address) {
             let res = await axios.get(
@@ -180,12 +183,12 @@ function App() {
 
             }
         }
-       
+
         getAllNFts()
         fetchData()
         dispatch(getLoarem("All"))
         dispatch(getTranding())
-    }, [address,chainId])
+    }, [address, chainId])
 
 
     useEffect(() => {
@@ -214,35 +217,56 @@ function App() {
         })
         socket.on("TrandingListiner", (uNFT) => {
             dispatch(getTranding())
-        }) 
-         socket.on("ProfileListiner", (uNFT) => {
+        })
+        socket.on("ProfileListiner", (uNFT) => {
             fetchData()
         })
         fetchData()
 
-    },[address,chainId])
+    }, [address, chainId])
 
     useEffect(() => {
         const claim_Able = async () => {
             try {
-                if(address){
+                if (address) {
 
-                    let provider = new ethers.providers.Web3Provider(window.ethereum);
-                    let signer = provider.getSigner()
-                    let contract = null
-                    if (chainId == 97) {
-                        contract = new Contract(Contract_Addresss[0].nftMarketContractAddress, Contract_Addresss[0].nftMarketContractAddress_Abi, signer);
-                    } else if (chainId == 11155111) {
-                        contract = new Contract(Contract_Addresss[1].nftMarketContractAddress, Contract_Addresss[1].nftMarketContractAddress_Abi, signer);
-                    } else {
-                        contract = new Contract(Contract_Addresss[2].nftMarketContractAddress, Contract_Addresss[2].nftMarketContractAddress_Abi, signer);
-                    }
-                    const tx = await contract.userFunds(address)
-                    let Claim_Amount = parseInt(tx).toString()
-                    // Claim_Amount = webSupply.utils.fromWei(Claim_Amount.toString())
+                    let Offer = await readContract({
+                        address:
+                            chainId == 97
+                                ? Contract_Addresss[0].nftMarketContractAddress
+                                : chainId == 11155111
+                                    ? Contract_Addresss[1].nftMarketContractAddress
+                                    : Contract_Addresss[2].nftMarketContractAddress,
+                        abi:
+                            chainId == 97
+                                ? Contract_Addresss[0].nftMarketContractAddress_Abi
+                                : chainId == 11155111
+                                    ? Contract_Addresss[1].nftMarketContractAddress_Abi
+                                    : Contract_Addresss[2].nftMarketContractAddress_Abi,
+                        functionName: "userFunds",
+                        args: [address],
+                    });
+
+                    let Claim_Amount = parseInt(Offer);
                     Claim_Amount = Claim_Amount / 1000000000000000000
-                    // console.log("claim_Able", Claim_Amount);
+                    // console.log("Claim_Amount", Claim_Amount);
                     setUserFunds_ClaimAble(Claim_Amount)
+
+                    // let provider = new ethers.providers.Web3Provider(window.ethereum);
+                    // let signer = provider.getSigner()
+                    // let contract = null
+                    // if (chainId == 97) {
+                    //     contract = new Contract(Contract_Addresss[0].nftMarketContractAddress, Contract_Addresss[0].nftMarketContractAddress_Abi, signer);
+                    // } else if (chainId == 11155111) {
+                    //     contract = new Contract(Contract_Addresss[1].nftMarketContractAddress, Contract_Addresss[1].nftMarketContractAddress_Abi, signer);
+                    // } else {
+                    //     contract = new Contract(Contract_Addresss[2].nftMarketContractAddress, Contract_Addresss[2].nftMarketContractAddress_Abi, signer);
+                    // }
+                    // const tx = await contract.userFunds(address)
+                    // let Claim_Amount = parseInt(tx).toString()
+                    // // Claim_Amount = webSupply.utils.fromWei(Claim_Amount.toString())
+                    // Claim_Amount = Claim_Amount / 1000000000000000000
+                    // // console.log("claim_Able", Claim_Amount);
                 }
 
             } catch (error) {
@@ -252,15 +276,15 @@ function App() {
         if (address) {
             socket.on("updateNFT", (uNFT) => {
                 claim_Able()
-             
+
             })
             socket.on("TrandingListiner", (uNFT) => {
                 claim_Able()
-                
+
             })
             socket.on("ProfileListiner", (uNFT) => {
                 claim_Able()
-                
+
 
             })
 
@@ -268,7 +292,7 @@ function App() {
             // return clearInterval(intveral)
         }
 
-    },[address,chainId]);
+    }, [address, chainId]);
 
     return (
         <div className='container-xxxl'>
