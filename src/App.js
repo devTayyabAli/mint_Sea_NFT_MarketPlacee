@@ -73,7 +73,7 @@ function App() {
     const dispatch = useDispatch()
     const [userFunds_ClaimAble, setUserFunds_ClaimAble] = useState(0)
 
-    console.log("Category_All",Category_All);
+  
 
 
     const fetchData = async () => {

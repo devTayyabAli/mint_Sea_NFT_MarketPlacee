@@ -14,21 +14,23 @@ import axios from 'axios';
 import { Pagination } from '@mui/material';
 import usePagination from '../helpers/Pagination';
 import './App.css'
+import { useAccount } from 'wagmi';
 
 function Category() {
     const collectionCtx = useContext(CollectionContext);
     const marketplaceCtx = useContext(MarketplaceContext);
     const [Category_Data, setCategory_Data] = useState([])
     const [Spinner, setSpinner] = useState(false)
+    const { address } = useAccount();
 
     // const [currentPage, setCurrentPage] = useState(1);
     const [currentPage, setPage] = useState(1);
     const [itemsPerPage] = useState(24);
-  
+
     const handleChange = (e, p) => {
-      setPage(p);
-      _DATA.jump(p);
-      window.scrollTo({ top: 0, behavior: "smooth" });
+        setPage(p);
+        _DATA.jump(p);
+        window.scrollTo({ top: 0, behavior: "smooth" });
     };
     const { category } = useParams();
 
@@ -37,7 +39,7 @@ function Category() {
     const {
         Filter_ShowData
     } = useWeb3();
-  
+
 
     const indexOfLastItem = currentPage * itemsPerPage;
     const indexOfFirstItem = indexOfLastItem - itemsPerPage;
@@ -53,7 +55,7 @@ function Category() {
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
-    console.log(category);
+
 
     // Pagination
     // function paginate(pageNumber) {
@@ -68,17 +70,17 @@ function Category() {
             try {
                 setSpinner(true)
                 let res = await axios.get(
-                    `https://newflash.womenempowerment.online/sell_and_auction_history?category=${category}`
+                    `https://newflash.womenempowerment.online/NFT_History?category=${category}&address=${address == undefined ? null : address}`
                 );
                 setCategory_Data(res.data.data)
                 setSpinner(false)
-        
+
                 console.log("UU", res);
-             
+
             } catch (error) {
                 console.log(error);
                 setSpinner(false)
-        
+
             }
         }
         getAllNFts()
@@ -92,22 +94,22 @@ function Category() {
                 <div className='container py-5'>
                     {!Spinner ? (
                         <div className='row mixitUpContainer gy-4 mb-5 align-items-stretch'>
-                            { _DATA.currentData().map((NFT, key) => {
-                                    const index = marketplaceCtx.offers
-                                        ? marketplaceCtx.offers.findIndex((offer) => offer.id === NFT.id)
-                                        : -1;
-                                    const owner = index === -1 ? NFT.owner : marketplaceCtx.offers[index].user;
-                                    const price =
-                                        index !== -1
-                                            ? formatPrice(marketplaceCtx.offers[index].price).toFixed(2)
-                                            : null;
+                            {_DATA.currentData().map((NFT, key) => {
+                                const index = marketplaceCtx.offers
+                                    ? marketplaceCtx.offers.findIndex((offer) => offer.id === NFT.id)
+                                    : -1;
+                                const owner = index === -1 ? NFT.owner : marketplaceCtx.offers[index].user;
+                                const price =
+                                    index !== -1
+                                        ? formatPrice(marketplaceCtx.offers[index].price).toFixed(2)
+                                        : null;
 
-                                    return (
-                                        <div className={`col-xl-3 col-lg-4 col-md-6 mix ${NFT.category}`} key={key}>
-                                            <NftItem {...NFT} NFT={NFT} index={index} owner={owner} price={NFT.price} nftKey={key} />
-                                        </div>
-                                    );
-                                })}
+                                return (
+                                    <div className={`col-xl-3 col-lg-4 col-md-6 mix ${NFT.category}`} key={key}>
+                                        <NftItem {...NFT} NFT={NFT} index={index} owner={owner} price={NFT.price} nftKey={key} />
+                                    </div>
+                                );
+                            })}
                         </div>
                     ) : (
                         <>
@@ -118,30 +120,30 @@ function Category() {
                         </>
                     )}
 
-{Category_Data.length> 25 && (
-                  <>
-                    <div className="d-flex justify-content-center">
-                      <Pagination
-                        count={count}
-                        page={currentPage}
-                        onChange={handleChange}
-                      />
-                    </div>
-                  </>
-                )}
-
-                    {Category_Data.length===0 && (
-                            <div className='row text-center'>
-                                <div className='col-lg-6 mx-auto'>
-                                    <i className='las la-exclamation mb-2' style={{ fontSize: '3rem' }}></i>
-                                    <h3 className='h3'>No NFTs listed under this category.</h3>
-                                    <p className='text-muted mb-3'>Return Home and pick another category...</p>
-                                    <Link className='btn btn-gradient-primary' to='/'>
-                                        Return Home
-                                    </Link>
-                                </div>
+                    {Category_Data.length > 25 && (
+                        <>
+                            <div className="d-flex justify-content-center">
+                                <Pagination
+                                    count={count}
+                                    page={currentPage}
+                                    onChange={handleChange}
+                                />
                             </div>
-                        )}
+                        </>
+                    )}
+
+                    {Spinner== false && Category_Data.length === 0 && (
+                        <div className='row text-center'>
+                            <div className='col-lg-6 mx-auto'>
+                                <i className='las la-exclamation mb-2' style={{ fontSize: '3rem' }}></i>
+                                <h3 className='h3'>No NFTs listed under this category.</h3>
+                                <p className='text-muted mb-3'>Return Home and pick another category...</p>
+                                <Link className='btn btn-gradient-primary' to='/'>
+                                    Return Home
+                                </Link>
+                            </div>
+                        </div>
+                    )}
                 </div>
             </section>
         </>

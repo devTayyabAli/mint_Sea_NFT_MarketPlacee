@@ -19,6 +19,7 @@ import usePagination from '../helpers/Pagination';
 import { getLoarem } from '../Redux/GetNFTs';
 import { Link } from 'react-router-dom';
 import './App.css'
+import { useAccount } from 'wagmi';
 
 function Explore() {
     let Category = useSelector((state) => state.Offers.Category)
@@ -28,6 +29,7 @@ function Explore() {
     const {
         ShowData, Spinner, Filter_ShowData
     } = useWeb3();
+    const { address } = useAccount();
 
     // console.log("AllNFTS", AllNFTS);
     // const [currentPage, setCurrentPage] = useState(1);
@@ -116,7 +118,7 @@ function Explore() {
                 {/* FILTER CONTROLS */}
                 <div className='container pt-5'>
                     <div className='controls d-flex flex-column flex-md-row mb-5 p-1'>
-                        <button className={`mixitup-control flex-fill m-1 ${Category == "All" ? "mixitup-control-active" : ""} `} type='button' onClick={() => (dispatch(setCategory("All")), dispatch(getLoarem("All")))} >
+                        <button className={`mixitup-control flex-fill m-1 ${Category == "All" ? "mixitup-control-active" : ""} `} type='button' onClick={() => (dispatch(setCategory("All")), dispatch(getLoarem({arg:"All",address:address})))} >
                             All
                         </button>
                         {categoryOptions.map((el, i) => {
@@ -126,7 +128,7 @@ function Explore() {
                                     className={`mixitup-control flex-fill m-1 ${Category == el.value ? "mixitup-control-active" : ""} `}
                                     type='button'
                                     // data-filter={`.${el.value}`}
-                                    onClick={() => (dispatch(setCategory(el.value)), dispatch(getLoarem(el.value)))}
+                                    onClick={() => (dispatch(setCategory(el.value)), dispatch(getLoarem({arg:el.value,address:address})))}
 
                                 >
                                     {el.label}

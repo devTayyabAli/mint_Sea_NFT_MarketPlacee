@@ -7,8 +7,8 @@ export const getLoarem=createAsyncThunk("lorem/getData",async (arg,{rejectWithVa
   
    
     try {
-    //  console.log("ARG",arg);
         const {data}= await axios.get(`https://newflash.womenempowerment.online/NFT_History?category=${arg?.arg}&address=${arg?.address==undefined ? null:arg?.address}`)
+         console.log("ARG",data);
        
        return data;
         
