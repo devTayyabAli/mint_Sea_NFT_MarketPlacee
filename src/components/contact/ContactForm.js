@@ -13,7 +13,7 @@ function ContactForm({ gridWidth }) {
     const onFinish = async (values) => {
         try {
             setSpinner(true)
-            let res = await axios.post("https://sanjhavehra.womenempowerment.online/Contact_Email_send", {
+            let res = await axios.post("https://newflash.womenempowerment.online/Contact_Email_send", {
                 Name: values.username,
                 subject: values.subject,
                 email: values.email,

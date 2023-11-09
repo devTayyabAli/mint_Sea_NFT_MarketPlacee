@@ -11,7 +11,7 @@ const fullScreenLoaderStyle = {
     right:"0",
     bottom:"0",
     background: 'rgba(0, 0, 0, 0.85)',
-    zIndex: '999999',
+    zIndex: '99',
 };
 
 function FullScreenLoader({ heading }) {

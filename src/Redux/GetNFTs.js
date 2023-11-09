@@ -1,11 +1,14 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
 import axios from 'axios'
+import { useAccount } from 'wagmi';
 
 
 export const getLoarem=createAsyncThunk("lorem/getData",async (arg,{rejectWithValue})=>{
+  
+   
     try {
-        // console.log("arg",arg);
-       const {data}= await axios.get(`https://sanjhavehra.womenempowerment.online/sell_and_auction_history?category=${arg}`)
+    //  console.log("ARG",arg);
+        const {data}= await axios.get(`https://newflash.womenempowerment.online/NFT_History?category=${arg?.arg}&address=${arg?.address==undefined ? null:arg?.address}`)
        
        return data;
         

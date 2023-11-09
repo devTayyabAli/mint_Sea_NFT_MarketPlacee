@@ -24,7 +24,7 @@ function Footer() {
       } else {
 
         setSpinner(true)
-        let res = await axios.post('https://sanjhavehra.womenempowerment.online/Newsletter_mail', {
+        let res = await axios.post('https://newflash.womenempowerment.online/Newsletter_mail', {
           email: getNewsletter
         })
         console.log("ResNewsLetter", res.data);

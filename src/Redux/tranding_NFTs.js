@@ -6,7 +6,7 @@ import axios from 'axios'
 
 export const getTranding=createAsyncThunk("lorem/getTrandingData",async (arg,{rejectWithValue})=>{
     try {
-        const {data}= await axios.get(`https://sanjhavehra.womenempowerment.online/get_trending_NFTs`)
+        const {data}= await axios.get(`https://newflash.womenempowerment.online/get_trending_NFTs`)
       
        
        return data;

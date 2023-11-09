@@ -68,7 +68,7 @@ function Category() {
             try {
                 setSpinner(true)
                 let res = await axios.get(
-                    `https://sanjhavehra.womenempowerment.online/sell_and_auction_history?category=${category}`
+                    `https://newflash.womenempowerment.online/sell_and_auction_history?category=${category}`
                 );
                 setCategory_Data(res.data.data)
                 setSpinner(false)

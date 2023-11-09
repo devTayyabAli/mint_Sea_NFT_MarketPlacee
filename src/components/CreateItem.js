@@ -238,7 +238,7 @@ function CreateItem() {
 
 
 
-                        let postapiPushdata = await axios.post("https://sanjhavehra.womenempowerment.online/open_marketplace", {
+                        let postapiPushdata = await axios.post("https://newflash.womenempowerment.online/open_marketplace", {
                             useraddress: address,
                             itemId: "01000000000000000",
                             nftContract: chainId == 97 ? Contract_Addresss[0].CreateNFT : chainId == 11155111 ? Contract_Addresss[1].CreateNFT : Contract_Addresss[2].CreateNFT,
@@ -265,7 +265,7 @@ function CreateItem() {
                         });
 
                         if(user_Profile?.address==undefined){
-                            let res= await axios.post('https://sanjhavehra.womenempowerment.online/create_user_profile',{
+                            let res= await axios.post('https://newflash.womenempowerment.online/create_user_profile',{
                                 address:address?.toUpperCase()
                             })
                             // console.log("Profile_Updated",res);

@@ -57,7 +57,7 @@ import { Contract, ethers } from 'ethers';
 
 import { readContract } from "@wagmi/core";
 
-const socket = io('https://sanjhavehra.womenempowerment.online/');
+const socket = io('https://newflash.womenempowerment.online/');
 
 
 function App() {
@@ -73,88 +73,13 @@ function App() {
     const dispatch = useDispatch()
     const [userFunds_ClaimAble, setUserFunds_ClaimAble] = useState(0)
 
+    console.log("Category_All",Category_All);
 
-    // useEffect(() => {
-    //     if (marketplaceCtx.sellers) {
-    //         const sellersAddress = marketplaceCtx.sellers['0'];
-    //         const sellersEth = marketplaceCtx.sellers['1'];
 
-    //         let values = [];
-    //         for (let i = 0; i < sellersAddress.length; i++) {
-    //             values.push({
-    //                 address: sellersAddress[i],
-    //                 value: parseInt(sellersEth[i]),
-    //             });
-    //         }
-    //         var calcTopSellers = [];
-    //         values.forEach(function (item) {
-    //             var existing = calcTopSellers.filter(function (v, i) {
-    //                 return v.address === item.address;
-    //             });
-    //             if (existing.length) {
-    //                 var existingIndex = calcTopSellers.indexOf(existing[0]);
-    //                 calcTopSellers[existingIndex].value = calcTopSellers[existingIndex].value.concat(item.value);
-    //             } else {
-    //                 if (typeof item.value === 'number') item.value = [item.value];
-    //                 calcTopSellers.push(item);
-    //             }
-    //         });
-
-    //         setTopSellers(
-    //             calcTopSellers.map((seller) => {
-    //                 return { address: seller.address, value: seller.value.reduce((a, b) => a + b, 0) };
-    //             })
-    //         );
-    //     }
-    // }, [marketplaceCtx.sellers]);
-
-    useEffect(() => {
-        const getCahinId = async () => {
-            if (address) {
-                if (window.ethereum) {
-                    window.web3 = new Web3(window.ethereum);
-                    // await window.ethereum.enable();
-                    await window.web3.eth.getChainId((err, netId) => {
-                        console.log("netId", netId);
-                        if (netId == 97 || netId == 11155111 || netId == 80001) {
-                            setNoContract(false)
-                        } else {
-                            setNoContract(true)
-                        }
-                    }
-                    )
-                }
-            }
-        }
-        // getCahinId()
-        // const loadBlockchainData = async () => {
-        //     try {
-
-        //         if (walletAddress) {
-        //             let Offers_Array = []
-        //             let nftMarketContractOf = new web3.eth.Contract(
-        //                 nftMarketContractAddress_Abi,
-        //                 nftMarketContractAddress
-        //             );
-        //             let OfferCount = await nftMarketContractOf.methods.offerCount().call()
-        //             for (let i = 1; i <= OfferCount; i++) {
-        //                 let Offer = await nftMarketContractOf.methods.offers(i).call()
-        //                 Offers_Array = [...Offers_Array, Offer]
-
-        //             }
-        //             dispatch(LoadOffers(Offers_Array))
-        //         }
-        //     } catch (error) {
-        //         console.log(error);
-        //     }
-
-        // }
-        // loadBlockchainData()
-    }, [address, chainId]);
     const fetchData = async () => {
         if (address) {
             let res = await axios.get(
-                `https://sanjhavehra.womenempowerment.online/get_user_profile?address=${address?.toUpperCase()}`
+                `https://newflash.womenempowerment.online/get_user_profile?address=${address?.toUpperCase()}`
             );
 
             if (res?.data.success == false) {
@@ -170,7 +95,7 @@ function App() {
             try {
                 setSpinner(true)
                 let res = await axios.get(
-                    `https://sanjhavehra.womenempowerment.online/sell_and_auction_history?category=All`
+                    `https://newflash.womenempowerment.online/NFT_History?category=${Category_All}&address=0x4113ccD05D440f9580d55B2B34C92d6cC82eAB3c`
                 );
                 setShowData(res.data.data)
                 setSpinner(false)
@@ -186,7 +111,7 @@ function App() {
 
         getAllNFts()
         fetchData()
-        dispatch(getLoarem("All"))
+        dispatch(getLoarem({arg:"All",address:address}))
         dispatch(getTranding())
     }, [address, chainId])
 
@@ -196,7 +121,8 @@ function App() {
             try {
                 setSpinner(true)
                 let res = await axios.get(
-                    `https://sanjhavehra.womenempowerment.online/sell_and_auction_history?category=${Category_All}`
+                    `https://newflash.womenempowerment.online/NFT_History?category=${Category_All}&address=${address==undefined ? null : address}
+                    `
                 );
                 setFilter_ShowData(res?.data?.data)
                 setSpinner(false)
@@ -213,13 +139,18 @@ function App() {
     }, [Category_All])
     useEffect(() => {
         socket.on("updateNFT", (uNFT) => {
-            dispatch(getLoarem("All"))
+            dispatch(getLoarem({arg:"All",address:address}))
         })
         socket.on("TrandingListiner", (uNFT) => {
             dispatch(getTranding())
         })
         socket.on("ProfileListiner", (uNFT) => {
             fetchData()
+        })
+        socket.on("FavoriteListiner", (uNFT) => {
+            // console.log("FavoriteListiner");
+            dispatch(getLoarem({arg:"All",address:address}))
+
         })
         fetchData()
 
@@ -229,7 +160,6 @@ function App() {
         const claim_Able = async () => {
             try {
                 if (address) {
-
                     let Offer = await readContract({
                         address:
                             chainId == 97
@@ -252,21 +182,7 @@ function App() {
                     // console.log("Claim_Amount", Claim_Amount);
                     setUserFunds_ClaimAble(Claim_Amount)
 
-                    // let provider = new ethers.providers.Web3Provider(window.ethereum);
-                    // let signer = provider.getSigner()
-                    // let contract = null
-                    // if (chainId == 97) {
-                    //     contract = new Contract(Contract_Addresss[0].nftMarketContractAddress, Contract_Addresss[0].nftMarketContractAddress_Abi, signer);
-                    // } else if (chainId == 11155111) {
-                    //     contract = new Contract(Contract_Addresss[1].nftMarketContractAddress, Contract_Addresss[1].nftMarketContractAddress_Abi, signer);
-                    // } else {
-                    //     contract = new Contract(Contract_Addresss[2].nftMarketContractAddress, Contract_Addresss[2].nftMarketContractAddress_Abi, signer);
-                    // }
-                    // const tx = await contract.userFunds(address)
-                    // let Claim_Amount = parseInt(tx).toString()
-                    // // Claim_Amount = webSupply.utils.fromWei(Claim_Amount.toString())
-                    // Claim_Amount = Claim_Amount / 1000000000000000000
-                    // // console.log("claim_Able", Claim_Amount);
+
                 }
 
             } catch (error) {
@@ -298,10 +214,10 @@ function App() {
         <div className='container-xxxl'>
             <BrowserRouter>
                 <Toaster />
-                <Header userFunds_ClaimAble={userFunds_ClaimAble} setUserFunds_ClaimAble={setUserFunds_ClaimAble} />
                 {/* {noMetaMask && <NoMetaMaskAlert />} */}
                 {/* {!noContract && <Header userFunds_ClaimAble={userFunds_ClaimAble} setUserFunds_ClaimAble={setUserFunds_ClaimAble} />} */}
                 {/* {noContract ? <NoContractAlert network={networkType} /> : null} */}
+                <Header userFunds_ClaimAble={userFunds_ClaimAble} setUserFunds_ClaimAble={setUserFunds_ClaimAble} />
                 <ScrollToTop>
                     <Switch>
                         <Route path='/' exact>

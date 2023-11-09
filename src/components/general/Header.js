@@ -13,12 +13,17 @@ import { Contract_Addresss } from '../../Utils/Contract';
 import '../../App.css'
 import { AiTwotoneHeart } from 'react-icons/ai'
 import { MdOutlineCollections } from 'react-icons/md';
+import {
+    prepareWriteContract,
+    waitForTransaction,
+    writeContract,
+} from "@wagmi/core";
 import io from 'socket.io-client';
-const socket = io('https://sanjhavehra.womenempowerment.online/');
+const socket = io('https://newflash.womenempowerment.online/');
 
 
 
-function Header({userFunds_ClaimAble,setUserFunds_ClaimAble}) {
+function Header({ userFunds_ClaimAble, setUserFunds_ClaimAble }) {
     const [fundsLoading, setFundsLoading] = useState(false);
     //const [darkMode, setDarkMode] = useState((localStorage.getItem("mode") === null || localStorage.getItem("mode") === "light") ? (false) : (true));
     const [darkMode, setDarkMode] = useState(true);
@@ -29,20 +34,20 @@ function Header({userFunds_ClaimAble,setUserFunds_ClaimAble}) {
     const user_Profile = useSelector((state) => state.Offers.user_Profile);
 
 
-    useEffect(()=>{
+    useEffect(() => {
         var connectButtonClass = ["iekbcc0", "iekbcc9", "ju367v73", "ju367v7o", "ju367v9c", "ju367vn", "ju367vec", "ju367vex", "ju367v11", "ju367v1c", "ju367v2b", "ju367v8o", "_12cbo8i3", "ju367v8m", "_12cbo8i4", "_12cbo8i6"];
 
         var connectWalletButton = document.querySelector("#navbarSupportedContent > ul:nth-child(2) > li.nav-item.nav-item.ms-lg-2 > div > button");
         //console.log(connectWalletButton)
 
-        if(connectWalletButton){
-            for(var i=0; i < connectButtonClass.length; i++){
+        if (connectWalletButton) {
+            for (var i = 0; i < connectButtonClass.length; i++) {
                 connectWalletButton.classList.remove(connectButtonClass[i]);
             }
 
             connectWalletButton.classList.add("btn-transparent");
         }
-    },[])
+    }, [])
 
     useEffect(() => {
         navbarChangeStyle();
@@ -65,74 +70,52 @@ function Header({userFunds_ClaimAble,setUserFunds_ClaimAble}) {
     const claimFundsHandler = async () => {
         try {
             setFundsLoading(true);
-            let provider = new ethers.providers.Web3Provider(window.ethereum);
-            let signer = provider.getSigner()
-            let contract = null
-            if (chainId == 97) {
-                contract = new Contract(Contract_Addresss[0].nftMarketContractAddress, Contract_Addresss[0].nftMarketContractAddress_Abi, signer);
-            } else if (chainId == 11155111) {
-                contract = new Contract(Contract_Addresss[1].nftMarketContractAddress, Contract_Addresss[1].nftMarketContractAddress_Abi, signer);
-            } else {
-                contract = new Contract(Contract_Addresss[2].nftMarketContractAddress, Contract_Addresss[2].nftMarketContractAddress_Abi, signer);
-            }
-            const tx = await contract.claimFunds()
-            await tx.wait();
+            const { request } = await prepareWriteContract({
+                address:
+                chainId == 97
+                  ? Contract_Addresss[0].nftMarketContractAddress
+                  : chainId == 11155111
+                  ? Contract_Addresss[1].nftMarketContractAddress
+                  : Contract_Addresss[2].nftMarketContractAddress,
+              abi:
+                chainId == 97
+                  ? Contract_Addresss[0].nftMarketContractAddress_Abi
+                  : chainId == 11155111
+                  ? Contract_Addresss[1].nftMarketContractAddress_Abi
+                  : Contract_Addresss[2].nftMarketContractAddress_Abi,
+                functionName: "claimFunds",
+               
+                account: address,
+            });
+            const { hash } = await writeContract(request);
+            const data = await waitForTransaction({
+                hash,
+            });
             setUserFunds_ClaimAble(0)
+            addToast("Transaction Successful", {
+                appearance: "success",
+            });
             setFundsLoading(false);
+            // let provider = new ethers.providers.Web3Provider(window.ethereum);
+            // let signer = provider.getSigner()
+            // let contract = null
+            // if (chainId == 97) {
+            //     contract = new Contract(Contract_Addresss[0].nftMarketContractAddress, Contract_Addresss[0].nftMarketContractAddress_Abi, signer);
+            // } else if (chainId == 11155111) {
+            //     contract = new Contract(Contract_Addresss[1].nftMarketContractAddress, Contract_Addresss[1].nftMarketContractAddress_Abi, signer);
+            // } else {
+            //     contract = new Contract(Contract_Addresss[2].nftMarketContractAddress, Contract_Addresss[2].nftMarketContractAddress_Abi, signer);
+            // }
+            // const tx = await contract.claimFunds()
+            // await tx.wait();
+
         } catch (error) {
             console.log(error);
             setFundsLoading(false);
         }
     };
 
-    // Event ClaimFunds subscription
-
-    // const webSupply = new Web3("https://bsc-mainnet.public.blastapi.io");
-    // useEffect(() => {
-    //     const claim_Able = async () => {
-    //         try {
-    //             let provider = new ethers.providers.Web3Provider(window.ethereum);
-    //             let signer = provider.getSigner()
-    //             let contract = null
-    //             if (chainId == 97) {
-    //                 contract = new Contract(Contract_Addresss[0].nftMarketContractAddress, Contract_Addresss[0].nftMarketContractAddress_Abi, signer);
-    //             } else if (chainId == 11155111) {
-    //                 contract = new Contract(Contract_Addresss[1].nftMarketContractAddress, Contract_Addresss[1].nftMarketContractAddress_Abi, signer);
-    //             } else {
-    //                 contract = new Contract(Contract_Addresss[2].nftMarketContractAddress, Contract_Addresss[2].nftMarketContractAddress_Abi, signer);
-    //             }
-    //             const tx = await contract.userFunds(address)
-    //             let Claim_Amount = parseInt(tx).toString()
-    //             // Claim_Amount = webSupply.utils.fromWei(Claim_Amount.toString())
-    //             Claim_Amount = Claim_Amount / 1000000000000000000
-    //             // console.log("claim_Able", Claim_Amount);
-    //             setUserFunds_ClaimAble(Claim_Amount)
-
-    //         } catch (error) {
-    //             console.log(error);
-    //         }
-    //     }
-    //     if (address) {
-    //         socket.on("updateNFT", (uNFT) => {
-    //             claim_Able()
-    //             console.log("updateNFT");
-    //         })
-    //         socket.on("TrandingListiner", (uNFT) => {
-    //             claim_Able()
-    //             console.log("TrandingListiner");
-
-    //         })
-    //         socket.on("ProfileListiner", (uNFT) => {
-    //             claim_Able()
-    //             console.log("ProfileListiner");
-
-    //         })
-
-    //         claim_Able()
-    //         // return clearInterval(intveral)
-    //     }
-
-    // },[]);
+   
 
     useEffect(() => {
         // //document.querySelector('#root').classList.contains('light')
@@ -175,7 +158,7 @@ function Header({userFunds_ClaimAble,setUserFunds_ClaimAble}) {
         <nav className='navbar navbar-expand-lg navbar-dark fixed-top' id='navbar'>
             <div className='container-xxl py-2'>
                 <Link className='navbar-brand' to='/'>
-                    <img className='img-fluid' src='/images/Logo-2.png' alt='MintSea' width='140'   />
+                    <img className='img-fluid' src='/images/Logo-2.png' alt='MintSea' width='140' />
                 </Link>
 
                 <button
@@ -234,7 +217,7 @@ function Header({userFunds_ClaimAble,setUserFunds_ClaimAble}) {
                                 <label className="form-check-label pt-1" htmlFor="flexSwitchCheckDefault">Night</label>
                             </div>
                         </li> */}
-                        
+
 
 
 
@@ -244,7 +227,7 @@ function Header({userFunds_ClaimAble,setUserFunds_ClaimAble}) {
                         <li className='nav-item'>
                             <NavLink className='nav-link d-none d-lg-block' to='/search'>
                                 {/* <i className='las la-search' style={{ marginTop: '0.125rem' }}></i> */}
-                                <img src="/images/icon_search.png" alt="search button" style={{height: "20px"}}/>
+                                <img src="/images/icon_search.png" alt="search button" style={{ height: "20px" }} />
                             </NavLink>
                             <NavLink className='nav-link d-lg-none' to='/search'>
                                 Search
@@ -296,7 +279,7 @@ function Header({userFunds_ClaimAble,setUserFunds_ClaimAble}) {
                                 </NavLink>
                                 <ul
                                     className='dropdown-menu dropdown-menu-dark dropdown-menu-end fade-down text-start'
-                                    aria-labelledby='accountDropdown' style={{background: "linear-gradient(0deg, #010135, #232386)", minWidth: "325px", borderRadius: "25px"}}
+                                    aria-labelledby='accountDropdown' style={{ background: "linear-gradient(0deg, #010135, #232386)", minWidth: "325px", borderRadius: "25px" }}
                                 >
                                     <li>
                                         <a
@@ -304,7 +287,7 @@ function Header({userFunds_ClaimAble,setUserFunds_ClaimAble}) {
                                             className='dropdown-item d-flex align-items-center text-white'
                                             target='_blank'
                                             rel='noopener noreferrer'
-                                            style={{minHeight: "45px"}}
+                                            style={{ minHeight: "45px" }}
                                         >
                                             <i className='las la-chart-bar me-2 nft-icons-medium'></i>
                                             Track transactions
@@ -315,7 +298,7 @@ function Header({userFunds_ClaimAble,setUserFunds_ClaimAble}) {
                                             to='/Favorite'
                                             className='dropdown-item d-flex align-items-center text-white'
                                             rel='noopener noreferrer'
-                                            style={{minHeight: "45px"}}
+                                            style={{ minHeight: "45px" }}
                                         >
                                             {/* <i className='las la-user-circle me-2 text-primary'></i> */}
                                             {/* <i class="fa-solid fa-heart me-2 text-primary"></i> */}
@@ -328,7 +311,7 @@ function Header({userFunds_ClaimAble,setUserFunds_ClaimAble}) {
                                             to='/User_Profile'
                                             className='dropdown-item d-flex align-items-center text-white'
                                             rel='noopener noreferrer'
-                                            style={{minHeight: "45px"}}
+                                            style={{ minHeight: "45px" }}
                                         >
                                             <i className='las la-user-circle me-2 nft-icons-medium'></i>
                                             User Profile
@@ -339,7 +322,7 @@ function Header({userFunds_ClaimAble,setUserFunds_ClaimAble}) {
                                             to='/User_Collection'
                                             className='dropdown-item d-flex align-items-center text-white'
                                             rel='noopener noreferrer'
-                                            style={{minHeight: "45px"}}
+                                            style={{ minHeight: "45px" }}
                                         >
                                             <MdOutlineCollections className=" me-2 fs-5 nft-icons-medium" />
                                             {/* <i className='las la-user-circle me-2 text-primary'></i> */}
@@ -347,15 +330,15 @@ function Header({userFunds_ClaimAble,setUserFunds_ClaimAble}) {
                                         </Link>
                                     </li>
                                     <li>
-                                        <NavLink className='dropdown-item d-flex text-white' to='/explore' style={{minHeight: "45px"}}>
+                                        <div className='dropdown-item d-flex text-white'  style={{ minHeight: "45px" }}>
                                             <i className='las la-wallet me-2 nft-icons-medium'></i>
                                             <div className='ms-0'>
                                                 <p className='mb-0 lh-1'>Marketplace Balance</p>
-                                                <p className='mb-0' style={{color: "#1ADFBB"}}>
+                                                <p className='mb-0' style={{ color: "#1ADFBB" }}>
                                                     {userFunds_ClaimAble}  {chainId === 11155111 ? "ETH" : chainId === 97 ? "BNB" : "MATIC"}
                                                 </p>
                                             </div>
-                                        </NavLink>
+                                        </div>
                                     </li>
                                     {/* <li onClick={() => disconnect()} >
                                         <NavLink className='dropdown-item d-flex' to='/' >

@@ -258,7 +258,8 @@ export default function User_Registration() {
           const data = await waitForTransaction({
             hash,
           });
-          console.log("hash", hash);
+
+          // console.log("hash", hash);
 
           // const tx = await contract.setApprovalForAll(MarketPlace_Address, true);
           // await tx.wait();
@@ -266,6 +267,9 @@ export default function User_Registration() {
           // let value = webSupply.utils.toWei(getOfferPrice.toString());
           let value = getOfferPrice * 1000000000000000000;
           setTimeout(() => {
+            addToast("Approve Successful", {
+              appearance: "success",
+            });
             const makeOffer = async () => {
               try {
                 const { request } = await prepareWriteContract({
@@ -336,7 +340,7 @@ export default function User_Registration() {
                 console.log("Offer", Offer);
 
                 let postapiPushdata = await axios.post(
-                  "https://sanjhavehra.womenempowerment.online/open_marketplace",
+                  "https://newflash.womenempowerment.online/open_marketplace",
                   {
                     
                     itemId: Offer,
@@ -361,41 +365,9 @@ export default function User_Registration() {
                 );
                 console.log("postapiPushdata", postapiPushdata);
 
-                let postapi = await axios.post(
-                  "https://sanjhavehra.womenempowerment.online/trending_NFTs",
-                  {    
-                    useraddress: address,
-                    itemId: Offer,
-                    nftContract: NFT_Addresss,
-                    tokenId: id,
-                    owner: items.owner_of,
-                    price: getOfferPrice,
-                    sold: items.Image_type,
-                    name: items.name,
-                    url: items.jsonUsrl,
-                    txn: hash,
-                    category: items.category,
-                    edate: new Date(),
-                    Description: items.description,
-                    isOnAuction:
-                      user_Profile?.username == undefined
-                        ? address
-                        : user_Profile?.username,
-                    bidEndTime:
-                      user_Profile?.image == undefined
-                        ? "./images/Avtat.png"
-                        : user_Profile?.image || "./images/Avtat.png",
-                    Blockchain:
-                      chainId == 97
-                        ? "Binance"
-                        : chainId == 11155111
-                        ? "Ethereum"
-                        : "Polygon",
-                  }
-                );
-                console.log("postapi", postapi);
+             
                 let payment = await axios.post(
-                  "https://sanjhavehra.womenempowerment.online/User_payment",
+                  "https://newflash.womenempowerment.online/User_payment",
                   {
                     Eth_Cost: chainId == 11155111 ? getOfferPrice : 0,
                     BNB_Cost: chainId == 97 ? getOfferPrice : 0,

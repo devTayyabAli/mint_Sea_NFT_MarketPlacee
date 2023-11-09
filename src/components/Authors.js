@@ -17,10 +17,15 @@ function Authors({ sellers }) {
 
     const get_All_Authors = async () => {
         try {
-            let res = await axios.get("https://sanjhavehra.womenempowerment.online/get_All_user_profile")
+            let res = await axios.get("https://newflash.womenempowerment.online/get_All_user_profile")
             res = res.data.data
-            // console.log("Authers",res);
-            setShow_Authers(res)
+            let Array_data = []
+            res.forEach(async(element) => {
+                let responce = await axios.get(`https://newflash.womenempowerment.online/Get_User_payment_Address?Address=${element.address.toUpperCase()}`)
+                // console.log("Authers",responce.data.data[0]);
+                Array_data = [...Array_data, { name: element.username, image: element.image, address: element.address,Eth_const:responce.data.data[0]?.Eth_Cost,Metic_Cost:responce.data.data[0]?.Metic_Cost,BNB_Cost:responce.data.data[0]?.BNB_Cost }]
+                setShow_Authers(Array_data)
+            });
         } catch (error) {
             console.log(error);
         }
@@ -37,6 +42,7 @@ function Authors({ sellers }) {
     }, []);
 
     // Pagination
+    console.log("show_Authers",show_Authers);
     const count = Math.ceil(show_Authers?.length / itemsPerPage);
         const _DATA = usePagination(show_Authers, itemsPerPage);
     
@@ -46,56 +52,8 @@ function Authors({ sellers }) {
             window.scrollTo({ top: 0, behavior: 'smooth' });
         }
 
-    // Create top sellers template
-    // const renderSellers = _DATA.currentData()
-    //     // .sort((a, b) => (a.value < b.value ? 1 : -1))
-    //     .map((seller, index) => {
-           
-    //         return (
-    //             <div className='col-xl-3 col-lg-4 col-md-6' key={index}>
-    //                 <div className='card bd-3 card-hover-minimal position-relative'>
-    //                     <div className='card-body'>
-    //                         <a
-    //                             className='d-flex align-items-center text-reset text-decoration-none stretched-link'
-    //                             // href={configEtherScanUrl(web3Ctx.networkId, seller.address)}
-    //                             rel='noreferrer noopener'
-    //                             target='_blank'
-    //                         >
-    //                             <p className='fw-bold text-primary mb-0'>{index + 1}.</p>
-    //                             <div className='position-relative'>
-    //                                 <div className='ms-3' >
-    //                                     {/* <img src={`${API_URL}uploads/${seller.image}`} alt="" style={{borderRadius:"50%",height:"50px"}} /> */}
-    //                                   {
-                                        
-    //                                     seller.image == "" ? <Avatar alt="" size="large"  />  :<Avatar alt="" size="large" src={`${seller.image}`} />
-    //                                   }
-                                        
-    //                                 </div>
-    //                                 <div className='author-img-badge bg-primary text-white'>
-    //                                     <i className='las la-check-double la-xs'></i>
-    //                                 </div>
-    //                             </div>
-    //                             <div className='ms-3'>
-    //                                 <h3 className='h6 mb-1 text-capitalize'>
-    //                                     {seller.username}
-    //                                     {seller?.address?.toUpperCase() === address?.toUpperCase() ? (
-    //                                         <span className='seller-badge ms-2'>You</span>
-    //                                     ) : null}
-    //                                 </h3>
-    //                                 <p className='text-sm text-primary mb-0'>
-    //                                     {/* {formatPrice(seller.).toFixed(2)} <span className='text-muted'>ETH</span> */}
-    //                                 </p>
-    //                             </div>
-    //                         </a>
-    //                     </div>
-    //                 </div>
-    //             </div>
-    //         );
-    //     });
-
-    const renderSellers = _DATA.currentData()
-    // .sort((a, b) => (a.value < b.value ? 1 : -1))
-    .map((seller, index) => {
+    
+    const renderSellers = _DATA.currentData().map((seller, index) => {
             console.log("seller",seller)
         
             return (

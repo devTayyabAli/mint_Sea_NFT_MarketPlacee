@@ -116,7 +116,7 @@ export default function Edit_User_Profile() {
           formData.append("bio", getUserData.bio);
 
           let res = await axios.post(
-            "https://sanjhavehra.womenempowerment.online/create_user_profile",
+            "https://newflash.womenempowerment.online/create_user_profile",
             formData
           );
           console.log("Res", res);
@@ -158,7 +158,7 @@ export default function Edit_User_Profile() {
      
 
       let res = await axios.post(
-        `https://sanjhavehra.womenempowerment.online/update_user_profile?address=${address.toUpperCase()}`,
+        `https://newflash.womenempowerment.online/update_user_profile?address=${address.toUpperCase()}`,
         {
           address:
             getUserData.address == null

@@ -29,7 +29,7 @@ function Explore() {
         ShowData, Spinner, Filter_ShowData
     } = useWeb3();
 
-
+    // console.log("AllNFTS", AllNFTS);
     // const [currentPage, setCurrentPage] = useState(1);
     const [currentPage, setPage] = useState(1);
     const [itemsPerPage] = useState(24);
@@ -84,20 +84,20 @@ function Explore() {
                 <div className='container z-index-10 position-relative'>
                     <div className='row align-items-center mt-5'>
 
-                        <div className='col-lg-6'>                        
+                        <div className='col-lg-6'>
                             <h1 className="text-white h-b-t-fs">Explore Our NFTs</h1>
                             {/* <h2 className='text-white ms-5 ps-3 mb-5' >                            
                                 Our NFTs
                             </h2> */}
                             {/* style={{fontSize: "2.8rem", fontWeight: "500"}} */}
                             <ul className='list-inline'>
-                                <li className='list-inline-item' style={{borderRight: "1px solid white"}}>
-                                    <Link className='text-muted me-2 fs-5' to='/' style={{textDecoration: "none"}}>
+                                <li className='list-inline-item' style={{ borderRight: "1px solid white" }}>
+                                    <Link className='text-muted me-2 fs-5' to='/' style={{ textDecoration: "none" }}>
                                         Home
                                     </Link>
                                 </li>
                                 <li className='list-inline-item'>
-                                    <Link className='text-white fs-5' to='/explore' style={{textDecoration: "none"}}>
+                                    <Link className='text-white fs-5' to='/explore' style={{ textDecoration: "none" }}>
                                         Explore Our NFTS
                                     </Link>
                                 </li>
@@ -105,7 +105,7 @@ function Explore() {
                         </div>
 
                         <div className='col-lg-6 ms-auto d-none d-lg-block'>
-                            <img className='img-fluid mx-auto w-75' src="/images/explore.webp" alt="explore" style={{filter: "drop-shadow(0px 0px 20px #141dec)"}}></img>
+                            <img className='img-fluid mx-auto w-75' src="/images/explore.webp" alt="explore" style={{ filter: "drop-shadow(0px 0px 20px #141dec)" }}></img>
                         </div>
 
                     </div>
