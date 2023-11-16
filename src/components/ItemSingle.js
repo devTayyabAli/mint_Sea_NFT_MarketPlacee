@@ -36,7 +36,7 @@ function ItemSingle() {
     try {
      
       let res = await axios.get(
-        `https://newflash.womenempowerment.online/get_one_NFT?id=${id}&&chainid=${chain_id}`
+        `https://sanjhavehra.womenempowerment.online/get_one_NFT?id=${id}&&chainid=${chain_id}`
       );
       // console.log("getAllNFts", res.data.data);
       if (res.data.success == true) {
@@ -56,7 +56,7 @@ function ItemSingle() {
   const fetchData = async () => {
     if (address) {
       let res = await axios.get(
-        `https://newflash.womenempowerment.online/get_user_profile?address=${address?.toUpperCase()}`
+        `https://sanjhavehra.womenempowerment.online/get_user_profile?address=${address?.toUpperCase()}`
       );
 
       if (res?.data.success == false) {
@@ -133,14 +133,14 @@ function ItemSingle() {
           // await tx.wait();
 
           // let DeleteItems = await axios.post(
-          //   "https://newflash.womenempowerment.online/update_sell_status",
+          //   "https://sanjhavehra.womenempowerment.online/update_sell_status",
           //   {
           //     tokenid: ShowData.tokenId,
           //     Blockchain: ShowData.Blockchain,
           //   }
           // )
           // console.log("DeleteItems", DeleteItems);
-          let payment = await axios.post("https://newflash.womenempowerment.online/User_payment", {
+          let payment = await axios.post("https://sanjhavehra.womenempowerment.online/User_payment", {
 
             Eth_Cost: chainId == 11155111 ? ShowData.price : 0,
             BNB_Cost: chainId == 97 ? ShowData.price : 0,
@@ -149,18 +149,18 @@ function ItemSingle() {
 
           });
           let TrandingItems = await axios.post(
-            "https://newflash.womenempowerment.online/update_Tranding",
+            "https://sanjhavehra.womenempowerment.online/update_Tranding",
             {
               tokenId: ShowData.tokenId,
               Blockchain: ShowData.Blockchain,
             }
           )
           console.log("TrandingItems", TrandingItems);
-          let update_Favorite = await axios.post(`https://newflash.womenempowerment.online/update_Favorite`, {
+          let update_Favorite = await axios.post(`https://sanjhavehra.womenempowerment.online/update_Favorite`, {
             tokenId: ShowData.tokenId
           })
           console.log("get_Favorite", update_Favorite.data);
-          let postapiPushdata = await axios.post("https://newflash.womenempowerment.online/open_marketplace", {
+          let postapiPushdata = await axios.post("https://sanjhavehra.womenempowerment.online/open_marketplace", {
            
             itemId: "01000000000000000",
             nftContract: chainId == 97 ? Contract_Addresss[0].CreateNFT : chainId == 11155111 ? Contract_Addresss[1].CreateNFT : Contract_Addresss[2].CreateNFT,
@@ -267,24 +267,24 @@ function ItemSingle() {
           });
 
           // let DeleteItems = await axios.post(
-          //   "https://newflash.womenempowerment.online/update_sell_status",
+          //   "https://sanjhavehra.womenempowerment.online/update_sell_status",
           //   {
           //     tokenid: ShowData.tokenId,
           //     Blockchain: ShowData.Blockchain,
           //   }
           // )
           let TrandingItems = await axios.post(
-            "https://newflash.womenempowerment.online/update_Tranding",
+            "https://sanjhavehra.womenempowerment.online/update_Tranding",
             {
               tokenId: ShowData.tokenId,
               Blockchain: ShowData.Blockchain,
             }
           )
 
-          let update_Favorite = await axios.post(`https://newflash.womenempowerment.online/update_Favorite`, {
+          let update_Favorite = await axios.post(`https://sanjhavehra.womenempowerment.online/update_Favorite`, {
             tokenId: ShowData.tokenId
           })
-          let postapiPushdata = await axios.post("https://newflash.womenempowerment.online/open_marketplace", {
+          let postapiPushdata = await axios.post("https://sanjhavehra.womenempowerment.online/open_marketplace", {
            
             itemId: "01000000000000000",
             nftContract: chainId == 97 ? Contract_Addresss[0].CreateNFT : chainId == 11155111 ? Contract_Addresss[1].CreateNFT : Contract_Addresss[2].CreateNFT,

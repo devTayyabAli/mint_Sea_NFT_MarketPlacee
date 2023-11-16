@@ -118,7 +118,7 @@ function Explore() {
                 {/* FILTER CONTROLS */}
                 <div className='container pt-5'>
                     <div className='controls d-flex flex-column flex-md-row mb-5 p-1'>
-                        <button className={`mixitup-control flex-fill m-1 ${Category == "All" ? "mixitup-control-active" : ""} `} type='button' onClick={() => (dispatch(setCategory("All")), dispatch(getLoarem({arg:"All",address:address})))} >
+                        <button className={`mixitup-control flex-fill m-1 ${Category == "All" ? "mixitup-control-active" : ""} `} type='button' onClick={() => (dispatch(setCategory("All")), dispatch(getLoarem("All")))} >
                             All
                         </button>
                         {categoryOptions.map((el, i) => {
@@ -128,7 +128,7 @@ function Explore() {
                                     className={`mixitup-control flex-fill m-1 ${Category == el.value ? "mixitup-control-active" : ""} `}
                                     type='button'
                                     // data-filter={`.${el.value}`}
-                                    onClick={() => (dispatch(setCategory(el.value)), dispatch(getLoarem({arg:el.value,address:address})))}
+                                    onClick={() => (dispatch(setCategory(el.value)), dispatch(getLoarem(el.value)))}
 
                                 >
                                     {el.label}

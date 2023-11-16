@@ -20,11 +20,11 @@ function Authors({ sellers }) {
     const get_All_Authors = async () => {
         try {
             setspinner(true)
-            let res = await axios.get("https://newflash.womenempowerment.online/get_All_user_profile")
+            let res = await axios.get("https://sanjhavehra.womenempowerment.online/get_All_user_profile")
             res = res.data.data
             let Array_data = []
             res.forEach(async (element) => {
-                let responce = await axios.get(`https://newflash.womenempowerment.online/Get_User_payment_Address?Address=${element.address.toUpperCase()}`)
+                let responce = await axios.get(`https://sanjhavehra.womenempowerment.online/Get_User_payment_Address?Address=${element.address.toUpperCase()}`)
                 // console.log("Authers",responce.data.data[0]);
                 if(responce.data.data[0] !=undefined){
 

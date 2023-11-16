@@ -33,6 +33,7 @@ import { useBalance } from "wagmi";
 import "./App.css";
 import { getLoarem } from "../../Redux/GetNFTs";
 import { getTranding } from "../../Redux/tranding_NFTs";
+import AVT from '../../Assets/Avtat.png'
 
 function NftItem({ NFT, title, category, nftKey }) {
   const dispatch = useDispatch();
@@ -99,14 +100,14 @@ function NftItem({ NFT, title, category, nftKey }) {
       if (Offer[4] || Offer[5]) {
         // console.log("OfferitemId",Number(Offer)==Number(NFT.itemId), NFT.itemId,Offer);
         let DeleteItems = await axios.post(
-          "https://newflash.womenempowerment.online/update_sell_status",
+          "https://sanjhavehra.womenempowerment.online/update_sell_status",
           {
             tokenid: NFT.tokenId,
             Blockchain: NFT.Blockchain,
           }
         );
         let TrandingItems = await axios.post(
-          "https://newflash.womenempowerment.online/update_Tranding",
+          "https://sanjhavehra.womenempowerment.online/update_Tranding",
           {
             tokenId: NFT.tokenId,
             Blockchain: NFT.Blockchain,
@@ -162,7 +163,7 @@ function NftItem({ NFT, title, category, nftKey }) {
             });
 
             // let DeleteItems = await axios.post(
-            //   "https://newflash.womenempowerment.online/update_sell_status",
+            //   "https://sanjhavehra.womenempowerment.online/update_sell_status",
             //   {
             //     tokenid: NFT.tokenId,
             //     Blockchain: NFT.Blockchain,
@@ -170,7 +171,7 @@ function NftItem({ NFT, title, category, nftKey }) {
             // );
             // console.log("DeleteItems", DeleteItems);
             let payment = await axios.post(
-              "https://newflash.womenempowerment.online/User_payment",
+              "https://sanjhavehra.womenempowerment.online/User_payment",
               {
                 Eth_Cost: chainId == 11155111 ? NFT.price : 0,
                 BNB_Cost: chainId == 97 ? NFT.price : 0,
@@ -179,7 +180,7 @@ function NftItem({ NFT, title, category, nftKey }) {
               }
             );
             // let TrandingItems = await axios.post(
-            //   "https://newflash.womenempowerment.online/update_Tranding",
+            //   "https://sanjhavehra.womenempowerment.online/update_Tranding",
             //   {
             //     tokenId: NFT.tokenId,
             //     Blockchain: NFT.Blockchain,
@@ -187,14 +188,14 @@ function NftItem({ NFT, title, category, nftKey }) {
             // );
             // console.log("TrandingItems", TrandingItems);
             let update_Favorite = await axios.post(
-              `https://newflash.womenempowerment.online/update_Favorite`,
+              `https://sanjhavehra.womenempowerment.online/update_Favorite`,
               {
                 name: NFT.name,
               }
             );
             console.log("get_Favorite", update_Favorite.data);
             let postapiPushdata = await axios.post(
-              "https://newflash.womenempowerment.online/open_marketplace",
+              "https://sanjhavehra.womenempowerment.online/open_marketplace",
               {
                 itemId: "01000000000000000",
                 nftContract:
@@ -291,7 +292,7 @@ function NftItem({ NFT, title, category, nftKey }) {
             hash,
           });
           // let DeleteItems = await axios.post(
-          //   "https://newflash.womenempowerment.online/update_sell_status",
+          //   "https://sanjhavehra.womenempowerment.online/update_sell_status",
           //   {
           //     tokenid: NFT.tokenId,
           //     Blockchain: NFT.Blockchain,
@@ -299,14 +300,14 @@ function NftItem({ NFT, title, category, nftKey }) {
           // );
 
           // let TrandingItems = await axios.post(
-          //   "https://newflash.womenempowerment.online/update_Tranding",
+          //   "https://sanjhavehra.womenempowerment.online/update_Tranding",
           //   {
           //     tokenid: NFT.tokenId,
           //     Blockchain: NFT.Blockchain,
           //   }
           // );
           let update_Favorite = await axios.post(
-            `https://newflash.womenempowerment.online/update_Favorite`,
+            `https://sanjhavehra.womenempowerment.online/update_Favorite`,
             {
               name: NFT.name,
             }
@@ -314,7 +315,7 @@ function NftItem({ NFT, title, category, nftKey }) {
           console.log("get_Favorite", update_Favorite.data);
 
           let postapiPushdata = await axios.post(
-            "https://newflash.womenempowerment.online/open_marketplace",
+            "https://sanjhavehra.womenempowerment.online/open_marketplace",
             {
               itemId: "01000000000000000",
               nftContract:
@@ -369,7 +370,7 @@ function NftItem({ NFT, title, category, nftKey }) {
         setIsFavorite(false);
       } else {
         let res = await axios.post(
-          "https://newflash.womenempowerment.online/Add_Favorite",
+          "https://sanjhavehra.womenempowerment.online/Add_Favorite",
           {
             useraddress: NFT?.useraddress,
             itemId: NFT.itemId,
@@ -392,8 +393,6 @@ function NftItem({ NFT, title, category, nftKey }) {
             bidEndTime:NFT?.bidEndTime,
             Owner_Address:NFT?.Owner_Address,
             favorite:true
-
-
           }
         );
         console.log("Add_Favorite", res.data.success);
@@ -410,7 +409,7 @@ function NftItem({ NFT, title, category, nftKey }) {
   const update_Favorite = async () => {
     try {
       let res = await axios.post(
-        `https://newflash.womenempowerment.online/update_Favorite`,
+        `https://sanjhavehra.womenempowerment.online/update_Favorite`,
         {
           name: NFT.name,
           useraddress: address,
@@ -421,7 +420,7 @@ function NftItem({ NFT, title, category, nftKey }) {
         toast.success("NFT Remove Fron Favorite Successfully");
         setIsFavorite(false);
         get_Favorite();
-        setfavrouteName(null);
+        // setfavrouteName(null);
       }
     } catch (error) {
       console.log(error);
@@ -430,9 +429,16 @@ function NftItem({ NFT, title, category, nftKey }) {
 
   const get_Favorite = async () => {
     try {
-      if(NFT.favorite==true){
-
-        // setIsFavorite(true);
+      let res = await axios.get(
+        `https://sanjhavehra.womenempowerment.online/get_One_Favorite?useraddress=${address}&&name=${NFT.name}`
+      );
+      // console.log("get_One_Favorite", res?.data);
+      if (res.data.success == true) {
+        let Res_data = res?.data?.data?.name;
+        if (Res_data == NFT.name) {
+          setfavrouteName(Res_data);
+          setIsFavorite(true);
+        }
       }
     } catch (error) {
       console.log(error);
@@ -442,6 +448,35 @@ function NftItem({ NFT, title, category, nftKey }) {
     get_Favorite();
   }, [favrouteName,IsFavorite]);
 
+  const fetchData = async () => {
+    if (NFT?.Owner_Address) {
+      let res = await axios.get(
+        `https://sanjhavehra.womenempowerment.online/get_user_profile?address=${NFT?.Owner_Address?.toUpperCase()}`
+      );
+
+      if (res?.data.success == false) {
+        // history("/Create_User_profile");
+      } else {
+        // console.log("OwnerAddress", res?.data?.data?.image);
+        setOwner_Data(res?.data?.data);
+      }
+    } else {
+      let res = await axios.get(
+        `https://sanjhavehra.womenempowerment.online/get_user_profile?address=${NFT?.useraddress?.toUpperCase()}`
+      );
+
+      if (res?.data.success == false) {
+        // history("/Create_User_profile");
+      } else {
+        // console.log("CreaterAddress", res?.data?.data?.image);
+        setOwner_Data(res?.data?.data);
+      }
+    }
+  };
+
+  useEffect(() => {
+    fetchData();
+  }, [address, NFT]);
 
 
   return (
@@ -452,9 +487,39 @@ function NftItem({ NFT, title, category, nftKey }) {
           {/* <div className="position-relative mb-2 shadow"> */}
           <div className="z-index-20  mb-2 d-flex align-items-center">
             <div className="rounded-circle">
+              
+            {owner_Data?.length == 0 ? (
+                <>
+                  <img
+                    src={AVT}
+                    style={{
+                      borderRadius: "50%",
+                      width: "2rem",
+                      height: "2rem",
+                    }}
+                    alt=""
+                  />
+                </>
+              ) : (
+                <>
+                  <img
+                    src={
+                      owner_Data.image==undefined ? 
+                      AVT:
+
+                      `${owner_Data.image}` || AVT}
+                    style={{
+                      borderRadius: "50%",
+                      width: "2rem",
+                      height: "2rem",
+                    }}
+                    alt=""
+                  />
+                </>
+              )}
              
 
-              {NFT.Owner_Address == undefined ? (
+              {/* {NFT.Owner_Address == undefined ? (
                 <>
                   <img
                     src={ NFT.bidEndTime == null ?
@@ -485,7 +550,7 @@ function NftItem({ NFT, title, category, nftKey }) {
                     alt=""
                   />
                 </>
-              )}
+              )} */}
             </div>
             <Link
               className="text-reset"
@@ -498,25 +563,23 @@ function NftItem({ NFT, title, category, nftKey }) {
                 {NFT.name}
               </p>
             </Link>
-            
+           
             <div
               className="favroute ms-auto"
               onClick={() =>
-                NFT.favorite ==true || NFT.favorite =="true"
-                ? (update_Favorite(),setIsFavorite(!IsFavorite))
-                  : (setIsFavorite(!IsFavorite), Add_to_favorite())
+                favrouteName != NFT.name
+                  ? (setIsFavorite(!IsFavorite), Add_to_favorite())
+                  : update_Favorite()
               }
             >
               <div className="inner_blockchain">
                 <div className="like_hrt">
-                  {NFT.favorite==true || NFT.favorite=="true" || IsFavorite==true ? (
+                  {favrouteName != null  || IsFavorite==true ? (
                     <>
-                      {" "}
                       <MdFavorite style={{ color: "red" }} />{" "}
                     </>
                   ) : (
                     <>
-                      {" "}
                       <MdFavoriteBorder style={{ color: "#f00" }} />
                     </>
                   )}

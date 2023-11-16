@@ -57,7 +57,7 @@ import { Contract, ethers } from 'ethers';
 
 import { readContract } from "@wagmi/core";
 
-const socket = io('https://newflash.womenempowerment.online/');
+const socket = io('https://sanjhavehra.womenempowerment.online/');
 
 
 function App() {
@@ -79,11 +79,14 @@ function App() {
     const fetchData = async () => {
         if (address) {
             let res = await axios.get(
-                `https://newflash.womenempowerment.online/get_user_profile?address=${address?.toUpperCase()}`
+                `https://sanjhavehra.womenempowerment.online/get_user_profile?address=${address?.toUpperCase()}`
             );
 
             if (res?.data.success == false) {
                 // history("/Create_User_profile");
+                console.log("get_user_profile");
+                dispatch(get_UserProfile([]))
+
             } else {
                 // console.log("get_user_profile", res);
                 dispatch(get_UserProfile(res?.data?.data))
@@ -95,7 +98,7 @@ function App() {
             try {
                 setSpinner(true)
                 let res = await axios.get(
-                    `https://newflash.womenempowerment.online/NFT_History?category=${Category_All}&address=0x4113ccD05D440f9580d55B2B34C92d6cC82eAB3c`
+                    `https://sanjhavehra.womenempowerment.online/sell_and_auction_history?category=${Category_All}`
                 );
                 setShowData(res.data.data)
                 setSpinner(false)
@@ -111,7 +114,7 @@ function App() {
 
         getAllNFts()
         fetchData()
-        dispatch(getLoarem({arg:"All",address:address}))
+        dispatch(getLoarem("All"))
         dispatch(getTranding())
     }, [address, chainId])
 
@@ -121,9 +124,13 @@ function App() {
             try {
                 setSpinner(true)
                 let res = await axios.get(
-                    `https://newflash.womenempowerment.online/NFT_History?category=${Category_All}&address=${address==undefined ? null : address}
+                    `https://sanjhavehra.womenempowerment.online/sell_and_auction_history?category=${Category_All}
                     `
                 );
+                // let res = await axios.get(
+                //     `https://sanjhavehra.womenempowerment.online/NFT_History?category=${Category_All}&address=${address==undefined ? null : address}
+                //     `
+                // );
                 setFilter_ShowData(res?.data?.data)
                 setSpinner(false)
 
@@ -139,7 +146,7 @@ function App() {
     }, [Category_All])
     useEffect(() => {
         socket.on("updateNFT", (uNFT) => {
-            dispatch(getLoarem({arg:"All",address:address}))
+            dispatch(getLoarem("All"))
         })
         socket.on("TrandingListiner", (uNFT) => {
             dispatch(getTranding())
@@ -149,7 +156,7 @@ function App() {
         })
         socket.on("FavoriteListiner", (uNFT) => {
             // console.log("FavoriteListiner");
-            dispatch(getLoarem({arg:"All",address:address}))
+            dispatch(getLoarem("All"))
 
         })
         fetchData()
@@ -200,8 +207,6 @@ function App() {
             })
             socket.on("ProfileListiner", (uNFT) => {
                 claim_Able()
-
-
             })
 
             claim_Able()

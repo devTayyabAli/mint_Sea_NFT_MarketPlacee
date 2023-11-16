@@ -8,7 +8,7 @@ import Loader from "../../general/Loader";
 import io from "socket.io-client";
 import { Link } from 'react-router-dom';
 
-const socket = io("https://newflash.womenempowerment.online/");
+const socket = io("https://sanjhavehra.womenempowerment.online/");
 
 export default function Favorite() {
   const [show_Favorite, setshow_Favorite] = useState([]);
@@ -20,9 +20,9 @@ export default function Favorite() {
     try {
       setSpinner(true);
       let res = await axios.get(
-        `https://newflash.womenempowerment.online/get_Favorite?useraddress=${address}`
+        `https://sanjhavehra.womenempowerment.online/get_Favorite?useraddress=${address}`
       );
-      console.log("Get_Favorite", res.data.data);
+      // console.log("_Favoriteaaaa", res.data.data);
       setshow_Favorite(res.data.data);
       setSpinner(false);
     } catch (error) {

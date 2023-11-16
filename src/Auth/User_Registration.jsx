@@ -92,6 +92,7 @@ export default function User_Registration() {
           // ...and any other configuration
         });
       }
+
       const allNFTs = [];
       // console.log("Chain", address);
       for (const chain of chains) {
@@ -100,94 +101,119 @@ export default function User_Registration() {
           chain,
         });
         allNFTs.push(response.jsonResponse?.result);
-       
       }
 
-      let res = await Moralis.EvmApi.nft.getWalletNFTs({
-        address,
-        chain,
-      });
+      //   let res = await Moralis.EvmApi.nft.getWalletNFTs({
+      //     address,
+      //     chain,
+      //   });
 
-     
-      res = res?.jsonResponse?.result;
+      // console.log("Test",res.jsonResponse);
 
-      let name;
-      let symbol;
-      let created_date;
-      let category;
-      let Image_type = "image";
-      let owner_of = null;
-      let token_address = null;
-      let amount = null;
-      let token_id = null;
-      let count = 0;
-      for (let j = 0; j < allNFTs.length; j++) {
-        // console.log("UrlallNFTs", allNFTs[j]);
-        for (let i = 0; i < allNFTs[j]?.length; i++) {
-          let jsonUsrl = allNFTs[j][i]?.token_uri;
+      //   res = res?.jsonResponse?.result;
+      if (allNFTs[0] && allNFTs[1] && allNFTs[2].length == 0) {
+        setCollectionArray([]);
+        setLoading_Spinner(false);
+      } else {
+        let name;
+        let symbol;
+        let created_date;
+        let category;
+        let Image_type = "image";
+        let owner_of = null;
+        let token_address = null;
+        let amount = null;
+        let token_id = null;
+        let count = 0;
+        for (let j = 0; j < allNFTs.length; j++) {
+          // console.log("UrlallNFTs", allNFTs[j]);
+          for (let i = 0; i < allNFTs[j]?.length; i++) {
+            let jsonUsrl = allNFTs[j][i]?.token_uri;
 
-          Image_type = "image";
-          if(jsonUsrl==undefined){
+            Image_type = "image";
+            if (jsonUsrl == undefined) {
+              if(allNFTs[j][i].name =="MintSea Collection"){
+                // console.log("jsonUsrl", allNFTs[j][i]);
+                imageArray = [
+                  ...imageArray,
+                  {
+                    url: "images/user_profile_placeholder.webp",
+                    name: allNFTs[j][i].name,
+                    owner_of: allNFTs[j][i].owner_of,
+                    token_address: allNFTs[j][i].token_address,
+                    amount: allNFTs[j][i].amount,
+                    symbol: symbol,
+                    token_id: allNFTs[j][i].token_id,
+                    jsonUsrl: "images/user_profile_placeholder.webp",
+                    created_date: allNFTs[j][i].last_token_uri_sync,
+                    category: "Art",
+                    Image_type: "image/png",
+                    description: "Null",
+                    Block_chain: "Binance",
+                  },
+                ];
+                
+                setCollectionArray(imageArray);
+              }
+            } else {
+              if (
+                allNFTs[j][i].token_address.toUpperCase() ==
+                  Contract_Addresss[0].CreateNFT.toUpperCase() ||
+                allNFTs[j][i].token_address.toUpperCase() ==
+                  Contract_Addresss[1].CreateNFT.toUpperCase() ||
+                allNFTs[j][i].token_address.toUpperCase() ==
+                  Contract_Addresss[2].CreateNFT.toUpperCase()
+              ) {
+                // if(allNFTs[j][i].token_address=="0xF766Ad06a71C51B7dbbb2e3C717A52BD354155d2" || allNFTs[j][i].token_address=="0xb0EfbDd0826FB657Dbb5b10161EB0533EA6220Bf" || allNFTs[j][i].token_address=="0x58C7dC293906Afe7Ae4fC719Ae54DBB18DA73dE4" )
+                // {
 
-          }else{
+                let data = `https://skywalker.infura-ipfs.io/ipfs/${jsonUsrl}`;
+                let Response = await axios.get(data);
+                // console.log("Response", Response.data.properties.name.description);
+                jsonUsrl = `https://skywalker.infura-ipfs.io/ipfs/${Response.data.properties.image.description}`;
+                name = Response.data.properties.name.description;
+                category = Response.data.properties.category.description;
+                Image_type = Response.data.properties.image.type;
+                owner_of = allNFTs[j][i].owner_of;
+                token_address = allNFTs[j][i].token_address;
+                amount = allNFTs[j][i].amount;
+                created_date = allNFTs[j][i].last_token_uri_sync;
+                token_id = allNFTs[j][i].token_id;
+                let finalUrl;
+                let Block_chain = Response.data.properties.category.chain;
+                // console.log("Image_type", Block_chain);
+                let description =
+                  Response.data.properties.description.description;
 
-            if (
-              allNFTs[j][i].token_address.toUpperCase() ==
-                Contract_Addresss[0].CreateNFT.toUpperCase() ||
-              allNFTs[j][i].token_address.toUpperCase() ==
-                Contract_Addresss[1].CreateNFT.toUpperCase() ||
-              allNFTs[j][i].token_address.toUpperCase() ==
-                Contract_Addresss[2].CreateNFT.toUpperCase()
-            ) {
-              // if(allNFTs[j][i].token_address=="0xF766Ad06a71C51B7dbbb2e3C717A52BD354155d2" || allNFTs[j][i].token_address=="0xb0EfbDd0826FB657Dbb5b10161EB0533EA6220Bf" || allNFTs[j][i].token_address=="0x58C7dC293906Afe7Ae4fC719Ae54DBB18DA73dE4" )
-              // {
-            
-              let data = `https://skywalker.infura-ipfs.io/ipfs/${jsonUsrl}`;
-              let Response = await axios.get(data);
-              // console.log("Response", Response.data.properties.name.description);
-              jsonUsrl = `https://skywalker.infura-ipfs.io/ipfs/${Response.data.properties.image.description}`;
-              name = Response.data.properties.name.description;
-              category = Response.data.properties.category.description;
-              Image_type = Response.data.properties.image.type;
-              // console.log("Image_type", Image_type);
-              owner_of = allNFTs[j][i].owner_of;
-              token_address = allNFTs[j][i].token_address;
-              amount = allNFTs[j][i].amount;
-              created_date = allNFTs[j][i].last_token_uri_sync;
-              token_id = allNFTs[j][i].token_id;
-              let finalUrl;
-              let Block_chain = Response.data.properties.category.chain;
-              let description = Response.data.properties.description.description;
-              
-  
-              imageArray = [
-                ...imageArray,
-                {
-                  url: finalUrl,
-                  name: name,
-                  owner_of: owner_of,
-                  token_address: token_address,
-                  amount: amount,
-                  symbol: symbol,
-                  token_id: token_id,
-                  jsonUsrl: jsonUsrl,
-                  created_date: created_date,
-                  category: category,
-                  Image_type: Image_type,
-                  Block_chain: Block_chain,
-                  description: description,
-                },
-              ];
-  
-              setCollectionArray(imageArray);
+                imageArray = [
+                  ...imageArray,
+                  {
+                    url: finalUrl,
+                    name: name,
+                    owner_of: owner_of,
+                    token_address: token_address,
+                    amount: amount,
+                    symbol: symbol,
+                    token_id: token_id,
+                    jsonUsrl: jsonUsrl,
+                    created_date: created_date,
+                    category: category,
+                    Image_type: Image_type,
+                    Block_chain: Block_chain,
+                    description: description,
+                  },
+                ];
+
+                setCollectionArray(imageArray);
+              }
             }
+            // console.log("Addressj", allNFTs[j][i].token_address.toUpperCase()==Contract_Addresss[0].CreateNFT.toUpperCase() || allNFTs[j][i].token_address.toUpperCase()==Contract_Addresss[1].CreateNFT.toUpperCase() || allNFTs[j][i].token_address.toUpperCase()==Contract_Addresss[2].CreateNFT.toUpperCase());
+
+            // }
           }
-          // console.log("Addressj", allNFTs[j][i].token_address.toUpperCase()==Contract_Addresss[0].CreateNFT.toUpperCase() || allNFTs[j][i].token_address.toUpperCase()==Contract_Addresss[1].CreateNFT.toUpperCase() || allNFTs[j][i].token_address.toUpperCase()==Contract_Addresss[2].CreateNFT.toUpperCase());
-          
-          // }
         }
+        setLoading_Spinner(false);
       }
-      setLoading_Spinner(false);
     } catch (error) {
       setLoading_Spinner(false);
 
@@ -197,9 +223,7 @@ export default function User_Registration() {
 
   useEffect(() => {
     runApp();
-
     document.getElementById("root").classList.add("bg-complete");
-
     return () => {
       document.getElementById("root").classList.remove("bg-complete");
     };
@@ -335,14 +359,13 @@ export default function User_Registration() {
                   functionName: "offers",
                   args: [OfferCount],
                 });
-      
+
                 Offer = parseInt(Offer);
                 console.log("Offer", Offer);
 
                 let postapiPushdata = await axios.post(
-                  "https://newflash.womenempowerment.online/open_marketplace",
+                  "https://sanjhavehra.womenempowerment.online/open_marketplace",
                   {
-                    
                     itemId: Offer,
                     nftContract: NFT_Addresss,
                     tokenId: id,
@@ -365,9 +388,8 @@ export default function User_Registration() {
                 );
                 console.log("postapiPushdata", postapiPushdata);
 
-             
                 let payment = await axios.post(
-                  "https://newflash.womenempowerment.online/User_payment",
+                  "https://sanjhavehra.womenempowerment.online/User_payment",
                   {
                     Eth_Cost: chainId == 11155111 ? getOfferPrice : 0,
                     BNB_Cost: chainId == 97 ? getOfferPrice : 0,
@@ -442,8 +464,10 @@ export default function User_Registration() {
           Contract_Addresss[2].CreateNFT
         );
 
-        const tx = await contract.methods.balanceOf(address).call();
-    
+        const tx = await contract.methods
+          .balanceOf(address)
+          .call();
+
         setBNB(parseInt(tx));
 
         let Ethereum_value = await contract_Ether.methods
@@ -506,7 +530,7 @@ export default function User_Registration() {
       .filter((element) => element.Block_chain == selectChain);
     // console.log("Found",found);
     setchainSort(found);
-  }, [selectChain]);
+  }, [selectChain, address, chainId]);
 
   const count = Math.ceil(CollectionArray?.length / itemsPerPage);
   const _DATA = usePagination(CollectionArray, itemsPerPage);
@@ -591,24 +615,29 @@ export default function User_Registration() {
                   className="js-copy-clipboard max-w-[10rem] select-none overflow-hidden text-ellipsis whitespace-nowrap"
                   data-tippy-content="Copy"
                 >
-                 
-           
                   <span className=" text-white">
                     <CopyToClipboard
-                      text={ Object.keys(user_Profile).length != 0
-                        ? user_Profile?.address
-                        :  address}
+                      text={
+                        Object.keys(user_Profile).length != 0
+                          ? user_Profile?.address
+                          : address
+                      }
                       onCopy={() => setcopied(true)}
                     >
                       <span>
-                        { Object.keys(user_Profile).length != 0
-                          ? user_Profile?.address .substring(0, 4) + "..." + user_Profile?.address .trim()?.substring(user_Profile?.address .length -4)
-                          :  address.substring(0, 4) + "..." + address.trim()?.substring(address.length -4)}
+                        {Object.keys(user_Profile).length != 0
+                          ? user_Profile?.address.substring(0, 4) +
+                            "..." +
+                            user_Profile?.address
+                              .trim()
+                              ?.substring(user_Profile?.address.length - 4)
+                          : address.substring(0, 4) +
+                            "..." +
+                            address.trim()?.substring(address.length - 4)}
                       </span>
                     </CopyToClipboard>
                     {copied ? toast.success("Copied") : null}
                   </span>
-                  
                 </button>
               </div>
               <p className="mx-auto mb-2 max-w-xl text-white text-md">
@@ -725,7 +754,6 @@ export default function User_Registration() {
                     </div>
                   </div>
                 </div> */}
-                
 
                 {Loading_Spinner == true && _DATA.currentData()?.length == 0 ? (
                   <>
@@ -736,8 +764,7 @@ export default function User_Registration() {
                       <Loader />
                     </>
                   </>
-                ) : Loading_Spinner == false &&
-                CollectionArray?.length == 0 ? (
+                ) : Loading_Spinner == false && CollectionArray?.length == 0 ? (
                   <>
                     <div className="col-12">
                       <NoDataAlert

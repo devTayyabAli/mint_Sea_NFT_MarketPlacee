@@ -21,7 +21,7 @@ import { useAccount } from 'wagmi';
 import { getLoarem } from '../Redux/GetNFTs';
 import { getTranding } from '../Redux/tranding_NFTs';
 import io from 'socket.io-client';
-const socket = io('https://newflash.womenempowerment.online/');
+const socket = io('https://sanjhavehra.womenempowerment.online/');
 
 SwiperCore.use([Navigation]);
 

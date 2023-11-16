@@ -19,7 +19,7 @@ import {
     writeContract,
 } from "@wagmi/core";
 import io from 'socket.io-client';
-const socket = io('https://newflash.womenempowerment.online/');
+const socket = io('https://sanjhavehra.womenempowerment.online/');
 
 
 

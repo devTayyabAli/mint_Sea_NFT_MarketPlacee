@@ -43,7 +43,7 @@ function Search() {
                 if (query != "") {
 
                     setSpinner(true)
-                    let res = await axios.get(`https://newflash.womenempowerment.online/searchNFT?name=${query}`)
+                    let res = await axios.get(`https://sanjhavehra.womenempowerment.online/searchNFT?name=${query}`)
                     //console.log("Search", res.data.data);
                     if (res.data.success == true) {
                         setSearchResultsLength(res.data.data)
