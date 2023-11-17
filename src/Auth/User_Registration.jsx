@@ -103,6 +103,7 @@ export default function User_Registration() {
         allNFTs.push(response.jsonResponse?.result);
       }
 
+
       //   let res = await Moralis.EvmApi.nft.getWalletNFTs({
       //     address,
       //     chain,
@@ -114,106 +115,107 @@ export default function User_Registration() {
       if (allNFTs[0] && allNFTs[1] && allNFTs[2].length == 0) {
         setCollectionArray([]);
         setLoading_Spinner(false);
-      } else {
-        let name;
-        let symbol;
-        let created_date;
-        let category;
-        let Image_type = "image";
-        let owner_of = null;
-        let token_address = null;
-        let amount = null;
-        let token_id = null;
-        let count = 0;
-        for (let j = 0; j < allNFTs.length; j++) {
-          // console.log("UrlallNFTs", allNFTs[j]);
-          for (let i = 0; i < allNFTs[j]?.length; i++) {
-            let jsonUsrl = allNFTs[j][i]?.token_uri;
+      } 
+      console.log("Test",allNFTs);
 
-            Image_type = "image";
-            if (jsonUsrl == undefined) {
-              if(allNFTs[j][i].name =="MintSea Collection"){
-                // console.log("jsonUsrl", allNFTs[j][i]);
-                imageArray = [
-                  ...imageArray,
-                  {
-                    url: "images/user_profile_placeholder.webp",
-                    name: allNFTs[j][i].name,
-                    owner_of: allNFTs[j][i].owner_of,
-                    token_address: allNFTs[j][i].token_address,
-                    amount: allNFTs[j][i].amount,
-                    symbol: symbol,
-                    token_id: allNFTs[j][i].token_id,
-                    jsonUsrl: "images/user_profile_placeholder.webp",
-                    created_date: allNFTs[j][i].last_token_uri_sync,
-                    category: "Art",
-                    Image_type: "image/png",
-                    description: "Null",
-                    Block_chain: "Binance",
-                  },
-                ];
-                
-                setCollectionArray(imageArray);
-              }
-            } else {
-              if (
-                allNFTs[j][i].token_address.toUpperCase() ==
-                  Contract_Addresss[0].CreateNFT.toUpperCase() ||
-                allNFTs[j][i].token_address.toUpperCase() ==
-                  Contract_Addresss[1].CreateNFT.toUpperCase() ||
-                allNFTs[j][i].token_address.toUpperCase() ==
-                  Contract_Addresss[2].CreateNFT.toUpperCase()
-              ) {
-                // if(allNFTs[j][i].token_address=="0xF766Ad06a71C51B7dbbb2e3C717A52BD354155d2" || allNFTs[j][i].token_address=="0xb0EfbDd0826FB657Dbb5b10161EB0533EA6220Bf" || allNFTs[j][i].token_address=="0x58C7dC293906Afe7Ae4fC719Ae54DBB18DA73dE4" )
-                // {
+      let name;
+      let symbol;
+      let created_date;
+      let category;
+      let Image_type = "image";
+      let owner_of = null;
+      let token_address = null;
+      let amount = null;
+      let token_id = null;
+      let count = 0;
+      for (let j = 0; j < allNFTs.length; j++) {
+        // console.log("UrlallNFTs", allNFTs[j]);
+        for (let i = 0; i < allNFTs[j]?.length; i++) {
+          let jsonUsrl = allNFTs[j][i]?.token_uri;
 
-                let data = `https://skywalker.infura-ipfs.io/ipfs/${jsonUsrl}`;
-                let Response = await axios.get(data);
-                // console.log("Response", Response.data.properties.name.description);
-                jsonUsrl = `https://skywalker.infura-ipfs.io/ipfs/${Response.data.properties.image.description}`;
-                name = Response.data.properties.name.description;
-                category = Response.data.properties.category.description;
-                Image_type = Response.data.properties.image.type;
-                owner_of = allNFTs[j][i].owner_of;
-                token_address = allNFTs[j][i].token_address;
-                amount = allNFTs[j][i].amount;
-                created_date = allNFTs[j][i].last_token_uri_sync;
-                token_id = allNFTs[j][i].token_id;
-                let finalUrl;
-                let Block_chain = Response.data.properties.category.chain;
-                // console.log("Image_type", Block_chain);
-                let description =
-                  Response.data.properties.description.description;
-
-                imageArray = [
-                  ...imageArray,
-                  {
-                    url: finalUrl,
-                    name: name,
-                    owner_of: owner_of,
-                    token_address: token_address,
-                    amount: amount,
-                    symbol: symbol,
-                    token_id: token_id,
-                    jsonUsrl: jsonUsrl,
-                    created_date: created_date,
-                    category: category,
-                    Image_type: Image_type,
-                    Block_chain: Block_chain,
-                    description: description,
-                  },
-                ];
-
-                setCollectionArray(imageArray);
-              }
+          Image_type = "image";
+          if (jsonUsrl == undefined) {
+            if(allNFTs[j][i].name =="MintSea Collection"){
+              // console.log("jsonUsrl", allNFTs[j][i]);
+              imageArray = [
+                ...imageArray,
+                {
+                  url: "images/user_profile_placeholder.webp",
+                  name: allNFTs[j][i].name,
+                  owner_of: allNFTs[j][i].owner_of,
+                  token_address: allNFTs[j][i].token_address,
+                  amount: allNFTs[j][i].amount,
+                  symbol: symbol,
+                  token_id: allNFTs[j][i].token_id,
+                  jsonUsrl: "images/user_profile_placeholder.webp",
+                  created_date: allNFTs[j][i].last_token_uri_sync,
+                  category: "Art",
+                  Image_type: "image/png",
+                  description: "Null",
+                  Block_chain: "Binance",
+                },
+              ];
+              
+              setCollectionArray(imageArray);
             }
-            // console.log("Addressj", allNFTs[j][i].token_address.toUpperCase()==Contract_Addresss[0].CreateNFT.toUpperCase() || allNFTs[j][i].token_address.toUpperCase()==Contract_Addresss[1].CreateNFT.toUpperCase() || allNFTs[j][i].token_address.toUpperCase()==Contract_Addresss[2].CreateNFT.toUpperCase());
+          } else {
+            if (
+              allNFTs[j][i].token_address.toUpperCase() ==
+                Contract_Addresss[0].CreateNFT.toUpperCase() ||
+              allNFTs[j][i].token_address.toUpperCase() ==
+                Contract_Addresss[1].CreateNFT.toUpperCase() ||
+              allNFTs[j][i].token_address.toUpperCase() ==
+                Contract_Addresss[2].CreateNFT.toUpperCase()
+            ) {
+              // if(allNFTs[j][i].token_address=="0xF766Ad06a71C51B7dbbb2e3C717A52BD354155d2" || allNFTs[j][i].token_address=="0xb0EfbDd0826FB657Dbb5b10161EB0533EA6220Bf" || allNFTs[j][i].token_address=="0x58C7dC293906Afe7Ae4fC719Ae54DBB18DA73dE4" )
+              // {
 
-            // }
+              let data = `https://skywalker.infura-ipfs.io/ipfs/${jsonUsrl}`;
+              let Response = await axios.get(data);
+              // console.log("Response", Response.data.properties.name.description);
+              jsonUsrl = `https://skywalker.infura-ipfs.io/ipfs/${Response.data.properties.image.description}`;
+              name = Response.data.properties.name.description;
+              category = Response.data.properties.category.description;
+              Image_type = Response.data.properties.image.type;
+              owner_of = allNFTs[j][i].owner_of;
+              token_address = allNFTs[j][i].token_address;
+              amount = allNFTs[j][i].amount;
+              created_date = allNFTs[j][i].last_token_uri_sync;
+              token_id = allNFTs[j][i].token_id;
+              let finalUrl;
+              let Block_chain = Response.data.properties.category.chain;
+              // console.log("Image_type", Block_chain);
+              let description =
+                Response.data.properties.description.description;
+
+              imageArray = [
+                ...imageArray,
+                {
+                  url: finalUrl,
+                  name: name,
+                  owner_of: owner_of,
+                  token_address: token_address,
+                  amount: amount,
+                  symbol: symbol,
+                  token_id: token_id,
+                  jsonUsrl: jsonUsrl,
+                  created_date: created_date,
+                  category: category,
+                  Image_type: Image_type,
+                  Block_chain: Block_chain,
+                  description: description,
+                },
+              ];
+
+              setCollectionArray(imageArray);
+            }
           }
+          // console.log("Addressj", allNFTs[j][i].token_address.toUpperCase()==Contract_Addresss[0].CreateNFT.toUpperCase() || allNFTs[j][i].token_address.toUpperCase()==Contract_Addresss[1].CreateNFT.toUpperCase() || allNFTs[j][i].token_address.toUpperCase()==Contract_Addresss[2].CreateNFT.toUpperCase());
+
+          // }
         }
-        setLoading_Spinner(false);
       }
+      setLoading_Spinner(false);
     } catch (error) {
       setLoading_Spinner(false);
 
