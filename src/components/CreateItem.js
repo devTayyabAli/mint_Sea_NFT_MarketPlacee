@@ -448,13 +448,13 @@ function CreateItem() {
                                                     filename.startsWith("audio") ? <>
                                                         {/* <audio controls={true} loop muted={true}
                                                         autoPlay={true} className="audio-element" src={preview} /> */}
-                                                        <div ref={vidButtonRef} class="c-mm" style={{ height: "16rem" }} >
+                                                        <div ref={vidButtonRef} className="c-mm" style={{ height: "16rem" }} >
                                                             <details>
-                                                                <summary class="c-mm__play" style={{ top: "12rem" }} onClick={handleToggleVideo} ><span data-css-icon="play"><i></i></span></summary>
+                                                                <summary className="c-mm__play" style={{ top: "12rem" }} onClick={handleToggleVideo} ><span data-css-icon="play"><i></i></span></summary>
                                                                 <span hidden></span>
                                                             </details>
-                                                            <div class="c-mm__inner">
-                                                                <figure data-filter="grainy text" class="c-mm__frame" style={{ height: "16rem" }} >
+                                                            <div className="c-mm__inner">
+                                                                <figure data-filter="grainy text" className="c-mm__frame" style={{ height: "16rem" }} >
                                                                     <img src="https://deliverysources.web.app/IstanbulMUN/images/redenx-min.jpg" width="100%" alt="" />
                                                                 </figure>
                                                             </div>
@@ -465,9 +465,9 @@ function CreateItem() {
 
                                                     </> : filename.startsWith("video") ? <>
 
-                                                        <div ref={vidButtonRef} class="c-mm">
+                                                        <div ref={vidButtonRef} className="c-mm">
                                                             <details>
-                                                                <summary class="c-mm__play"
+                                                                <summary className="c-mm__play"
 
                                                                 ><span data-css-icon="play" onClick={handleToggleVideo}><i></i></span></summary>
                                                                 <span hidden></span>
@@ -591,7 +591,7 @@ function CreateItem() {
                                                     }
                                                 />
 
-                                                {/* <select class="form-select" aria-label="Default select example">
+                                                {/* <select className="form-select" aria-label="Default select example">
                                                     <option selected>Open this select menu</option>
                                                     <option value="1" data-icon={<><FaEthereum/></>}>0  </option>
                                                     <option value="2">Two</option>

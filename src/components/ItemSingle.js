@@ -71,6 +71,11 @@ function ItemSingle() {
     getAllNFts()
     fetchData();
 
+    document.getElementById("root").classList.add("bg-complete");
+      
+    return () => {
+        document.getElementById("root").classList.remove("bg-complete");
+    };
   }, [id,address,chain_id]);
 
 
@@ -343,7 +348,7 @@ function ItemSingle() {
       <section className='py-5 mt-2'>
         {ShowData?.length == 0 ? (
           <div className='py-5 text-center mt-5'>
-            <h1 className='h2 mt-5'>Fetching item details</h1>
+            <h1 className='h2 mt-5 text-white'>Fetching item details</h1>
             <p className='text-muted'>Please wait until we prepare your data.</p>
             <Loader />
           </div>
@@ -421,8 +426,8 @@ function ItemSingle() {
                             <h6 className='mb-0 text-white'>Price</h6>
                           </div>
                           <div className='col-6'>
-                            <div className='text-sm text-muted fw-normal mb-0 d-flex align-items-center justify-content-end'>
-                              <span className='icon bg-primary text-white me-2'>
+                            <div className='text-lg fw-normal mb-0 d-flex align-items-center justify-content-end'>
+                              <span className='icon bg-transparent me-2' style={{color: "#1ADFBB"}}>
                                 {ShowData.Blockchain == "Binance" ? (
                                   <SiBinance className="fa-brands fa-ethereum" />
                                 ) : ShowData.Blockchain === "Ethereum" ? (
@@ -430,14 +435,14 @@ function ItemSingle() {
                                 ) : (
                                   <>
                                     <svg
-                                      fill="white"
+                                      fill="#1ADFBB"
                                       viewBox="0 0 24 24"
                                       xmlns="http://www.w3.org/2000/svg"
-                                      style={{ width: "18px", height: "20px" }}
+                                      style={{ width: "24px", height: "24px" }}
                                     >
                                       <path
                                         d="M16.5828 8.90039C16.2516 8.70599 15.8196 8.70599 15.4524 8.90039L12.8604 10.4016L11.1 11.3808L8.508 12.882C8.1768 13.0764 7.7448 13.0764 7.3776 12.882L5.3184 11.7084C4.9872 11.514 4.7532 11.154 4.7532 10.7616V8.44679C4.7532 8.05439 4.9512 7.69799 5.3184 7.49999L7.3452 6.35879C7.6764 6.16439 8.1084 6.16439 8.4756 6.35879L10.5024 7.49999C10.8336 7.69439 11.0676 8.05439 11.0676 8.44679V9.94799L12.828 8.93639V7.43519C12.828 7.04279 12.63 6.68639 12.2628 6.48839L8.5116 4.33559C8.1804 4.14119 7.7484 4.14119 7.3812 4.33559L3.5652 6.48839C3.198 6.68279 3 7.04279 3 7.43519V11.7732C3 12.1656 3.198 12.522 3.5652 12.72L7.3848 14.8728C7.716 15.0672 8.148 15.0672 8.5152 14.8728L11.1072 13.404L12.8676 12.3924L15.4596 10.9236C15.7908 10.7292 16.2228 10.7292 16.59 10.9236L18.6168 12.0648C18.948 12.2592 19.182 12.6192 19.182 13.0116V15.3264C19.182 15.7188 18.984 16.0752 18.6168 16.2732L16.59 17.4468C16.2588 17.6412 15.8268 17.6412 15.4596 17.4468L13.4328 16.3056C13.1016 16.1112 12.8676 15.7512 12.8676 15.3588V13.8576L11.1072 14.8692V16.3704C11.1072 16.7628 11.3052 17.1192 11.6724 17.3172L15.492 19.47C15.8232 19.6644 16.2552 19.6644 16.6224 19.47L20.442 17.3172C20.7732 17.1228 21.0072 16.7628 21.0072 16.3704V12.0324C21.0072 11.64 20.8092 11.2836 20.442 11.0856L16.5828 8.90039Z"
-                                        fill="white"
+                                        fill="#1ADFBB"
                                       ></path>
                                     </svg>
                                   </>
@@ -445,8 +450,8 @@ function ItemSingle() {
                                 {/* <i className='lab la-ethereum fa-fw'></i> */}
                               </span>
 
-                              <p className='mb-0 h4 d-flex align-items-end fw-normal text-white ms-2'>
-                                {ShowData.price} <span className='ms-2 text-white small'>
+                              <p className='mb-0 h4 d-flex align-items-end fw-bold ms-2'>
+                                {ShowData.price} <span className='ms-2 small' style={{color: "#1ADFBB"}}>
 
                                   {ShowData.Blockchain == "Binance"
                                     ? "BNB"

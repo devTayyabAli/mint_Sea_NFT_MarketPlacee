@@ -201,9 +201,12 @@ function Header({ userFunds_ClaimAble, setUserFunds_ClaimAble }) {
                             </NavLink>
                         </li>
                         <li className='nav-item'>
-                            <NavLink className='nav-link px-xl-4' to='*'>
+                            {/* <NavLink className='nav-link px-xl-4' to='*'>
                                 Blog
-                            </NavLink>
+                            </NavLink> */}
+                            <a className='nav-link px-xl-4' href='/blog/' rel="noreferrer" target="_blank">
+                                Blog
+                            </a>
                         </li>
                         <li className='nav-item'>
                             <NavLink className='nav-link px-xl-4' to='/mint'>
@@ -301,7 +304,7 @@ function Header({ userFunds_ClaimAble, setUserFunds_ClaimAble }) {
                                             style={{ minHeight: "45px" }}
                                         >
                                             {/* <i className='las la-user-circle me-2 text-primary'></i> */}
-                                            {/* <i class="fa-solid fa-heart me-2 text-primary"></i> */}
+                                            {/* <i className="fa-solid fa-heart me-2 text-primary"></i> */}
                                             <AiTwotoneHeart className=" me-2 fs-5 nft-icons-medium" />
                                             Favourites
                                         </Link>

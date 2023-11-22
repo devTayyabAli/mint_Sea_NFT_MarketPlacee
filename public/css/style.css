@@ -5729,7 +5729,7 @@ body{
 }
 
 
-.btn-transparent {
+.btn-transparent, [data-rk] .ju367v9c {
     border: none!important;
     color: #ffffff!important;
     /* font-weight: bold!important; */
@@ -5745,7 +5745,7 @@ body{
     font-size: 1rem!important;
 }
 
-.btn-transparent:hover {
+.btn-transparent:hover, [data-rk] .ju367v9c {
     background-color: #ffffff!important;
     color: #4659CF!important;
 }
@@ -5917,11 +5917,15 @@ body{
     border: 1px solid transparent!important;
 }
 
-.scroll-top-btn:hover{
+/* .scroll-top-btn:hover{
     border: 1px solid red!important;
     color: red!important;
     font-weight: bolder!important;
     right: 1rem!important;
+} */
+.scroll-top-btn:hover {
+    /* background: #0e1118; */
+    background: white!important;
 }
 
 .dropdown-menu-dark .dropdown-item:hover, .dropdown-menu-dark .dropdown-item:focus {

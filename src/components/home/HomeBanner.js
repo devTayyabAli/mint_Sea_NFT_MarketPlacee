@@ -1,7 +1,10 @@
 // import { useCallback } from "react";
 // import Particles from "react-tsparticles";
 // import { loadFull } from "tsparticles";
+//import React, { useEffect } from 'react';
+import React, {useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
+import './style.css';
 
 // import { particlesOptions } from '../../helpers/constants';
 // import { useDispatch } from 'react-redux';
@@ -18,6 +21,21 @@ function HomeBanner() {
     // const particlesLoaded = useCallback(async container => {
     //     // await console.log(container);
     // }, []);
+
+    useEffect(() => {
+        const script = document.createElement('script');
+        script.id = 'animation';
+        script.src = "/js/animation.js";
+        script.async = true;
+    
+        document.body.appendChild(script);
+        //console.log("added script");
+    
+        return () => {
+          document.body.removeChild(script);
+          //console.log("removed script");
+        }
+      }, []);
   
     return (
         <section className='hero'>
@@ -106,7 +124,65 @@ function HomeBanner() {
                     <div className='col-lg-6 ms-auto d-none d-lg-block'>
                         {/* <img className='img-fluid mx-auto' src=' images/illu-3.png' alt='..' /> */}
                         {/* <img className='img-fluid mx-auto' src="/images/hero.png" alt="hero"></img> */}
-                        <img className='img-fluid mx-auto' src="/images/hero-animation.gif" alt="hero"></img>
+                        {/* <img className='img-fluid mx-auto' src="/images/hero-animation.gif" alt="hero"></img> */}
+                        <div className="scene">
+                            <div className="carousel">
+                                <div className="carousel__cell">
+                                    <Link to={"/categories/art"}>
+                                        <img src="/images/cards/art.webp" alt="art"/>
+                                    </Link>
+                                </div>
+                                <div className="carousel__cell">
+                                    <Link to={"/categories/collectibles"}>
+                                        <img src="/images/cards/collectibles.webp" alt="collectibles"/>
+                                    </Link>
+                                </div>
+                                <div className="carousel__cell">
+                                    <Link to={"/categories/domainNames"}>
+                                        <img src="/images/cards/domainNames.webp" alt="domainNames"/>
+                                    </Link>
+                                </div>
+                                <div className="carousel__cell">
+                                    <Link to={"/categories/music"}>
+                                        <img src="/images/cards/music.webp" alt="music"/>
+                                    </Link>
+                                </div>
+                                <div className="carousel__cell">
+                                    <Link to={"/categories/trendingCards"}>
+                                        <img src="/images/cards/trendingCards.webp" alt="trending cards"/>
+                                    </Link>
+                                </div>
+                                <div className="carousel__cell">
+                                    <Link to={"/categories/virtualWorlds"}>
+                                        <img src="/images/cards/virtualWorlds.webp" alt="virtual worlds"/>
+                                    </Link>
+                                </div>
+                            </div>
+                        </div>
+
+                        {/* <div className="carousel-options">
+                            <p>
+                                <label>
+                                Cells
+                                <input className="cells-range" type="range" min="6" max="6" value="1" />
+                                </label>
+                            </p>
+                            <p>
+                                <button className="previous-button">Previous</button>
+                                <button className="next-button">Next</button>
+                            </p>
+                            <p>
+                                Orientation:
+                                <label>
+                                <input type="radio" name="orientation" value="horizontal" checked />
+                                horizontal
+                                </label>
+                                <label>
+                                <input type="radio" name="orientation" value="vertical" />
+                                vertical
+                                </label>
+                            </p>
+                        </div> */}
                     </div>
 
                     <div className='col-lg-6'>
