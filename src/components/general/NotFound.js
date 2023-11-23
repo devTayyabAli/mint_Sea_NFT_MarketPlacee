@@ -13,12 +13,12 @@ function NotFound() {
         <div className='container py-5'>
             <div className='row py-5 text-center'>
                 <div className='col--lg-6 mx-auto'>
-                    <p className='mb-0 fw-bold' style={{ fontSize: "10rem", textShadow: "2px 2px 4px rgba(0, 0, 0, 0.4)" }}>
+                    <p className='mb-0 fw-bold text-white' style={{ fontSize: "10rem", textShadow: "2px 2px 4px rgba(0, 0, 0, 0.4)" }}>
                         404
                     </p>
                     <h1 className='h3 text-uppercase'>Not Found</h1>
-                    <p className='text-muted'>This page is not found, return to Home page</p>
-                    <Link to='/' className='btn btn-gradient-primary'>
+                    <p className='text-white'>This page is not found, return to Home page</p>
+                    <Link to='/' className='btn-blue'>
                         Homepage
                     </Link>
                 </div>

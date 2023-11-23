@@ -1,0 +1,75 @@
+.scene {
+    /**border: 1px solid #CCC;**/
+    margin: 40px 0;
+    position: relative;
+    /**width: 210px;
+    height: 140px;**/
+    width: 210px;
+    height: 250px;
+    margin: 80px auto;
+    /**perspective: 1000px;
+    perspective: 350px;**/
+    perspective: 700px;
+  }
+
+  .carousel {
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    transform: translateZ(-288px);
+    transform-style: preserve-3d;
+    transition: transform 1s;
+  }
+
+  .carousel__cell {
+    display: flex;
+    justify-content: center;
+    position: absolute;
+    /**height: 120px;**/
+    width: 190px;
+    height: 250px;
+    /**left: 10px;
+    top: 10px;
+    border: 2px solid black;
+    line-height: 116px;
+    font-size: 80px;
+    font-weight: bold;
+    color: white;
+    text-align: center;
+    transition: transform 1s, opacity 1s;**/
+  }
+  
+  .carousel__cell a {
+      width: 90%;
+  }
+  
+  .carousel__cell img {
+      width: 100%;
+      /**filter: drop-shadow(0 0 30px #1adfbb87);**/
+      filter: drop-shadow(0 0 30px #1adfbbc9);
+      /**-webkit-box-shadow: 0 0 8px #fff;
+      box-shadow: 0 0 8px #fff;**/
+      -webkit-box-reflect: below 10px linear-gradient(transparent, transparent, #0005);
+  }
+
+  /**.carousel__cell:nth-child(6n+1) { background: hsla(  0, 100%, 50%, 0.8); }
+  .carousel__cell:nth-child(6n+2) { background: hsla( 40, 100%, 50%, 0.8); }
+  .carousel__cell:nth-child(6n+3) { background: hsla( 80, 100%, 50%, 0.8); }
+  .carousel__cell:nth-child(6n+4) { background: hsla(120, 100%, 50%, 0.8); }
+  .carousel__cell:nth-child(6n+5) { background: hsla(160, 100%, 50%, 0.8); }
+  .carousel__cell:nth-child(6n+0) { background: hsla(200, 100%, 50%, 0.8); }**/
+
+  .carousel__cell:nth-child(1) { transform: rotateY(  0deg) translateZ(288px); }
+  .carousel__cell:nth-child(2) { transform: rotateY( 40deg) translateZ(288px); }
+  .carousel__cell:nth-child(3) { transform: rotateY( 80deg) translateZ(288px); }
+  .carousel__cell:nth-child(4) { transform: rotateY(120deg) translateZ(288px); }
+  .carousel__cell:nth-child(5) { transform: rotateY(160deg) translateZ(288px); }
+  .carousel__cell:nth-child(6) { transform: rotateY(200deg) translateZ(288px); }
+
+  .carousel-options {
+    text-align: center;
+    position: relative;
+    z-index: 2;
+    background: hsla(0, 0%, 100%, 0.8);
+    display: none;
+  }

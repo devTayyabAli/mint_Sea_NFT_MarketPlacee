@@ -52,13 +52,13 @@ function ItemPreview({ heading, preview, title, category, author, filename }) {
                             {
                                 filename.startsWith("audio") ? <>
 
-                                    <div ref={vidButtonRef} class="c-mm" style={{ height: "10rem" }} >
+                                    <div ref={vidButtonRef} className="c-mm" style={{ height: "10rem" }} >
                                         <details>
-                                            <summary class="c-mm__play" style={{ top: "5rem" }} onClick={handleToggleVideo} ><span data-css-icon="play"><i></i></span></summary>
+                                            <summary className="c-mm__play" style={{ top: "5rem" }} onClick={handleToggleVideo} ><span data-css-icon="play"><i></i></span></summary>
                                             <span hidden></span>
                                         </details>
-                                        <div class="c-mm__inner">
-                                            <figure data-filter="grainy text" class="c-mm__frame" style={{ height: "10rem" }} >
+                                        <div className="c-mm__inner">
+                                            <figure data-filter="grainy text" className="c-mm__frame" style={{ height: "10rem" }} >
                                                 <img src="https://deliverysources.web.app/IstanbulMUN/images/redenx-min.jpg" width="100%" alt="" />
                                             </figure>
                                         </div>
@@ -66,9 +66,9 @@ function ItemPreview({ heading, preview, title, category, author, filename }) {
                                     </div>
                                 </> : filename.startsWith("video") ? <>
                          
-                                    <div ref={vidButtonRef} class="c-mm">
+                                    <div ref={vidButtonRef} className="c-mm">
                                         <details>
-                                            <summary class="c-mm__play"
+                                            <summary className="c-mm__play"
 
                                             ><span data-css-icon="play" onClick={handleToggleVideo}><i></i></span></summary>
                                             <span hidden></span>

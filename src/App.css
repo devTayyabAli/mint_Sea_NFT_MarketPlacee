@@ -11654,7 +11654,8 @@ a {
 }
 
 .scroll-top-btn:hover {
-    background: #0e1118;
+    /* background: #0e1118; */
+    background: white!important;
 }
 
 .scroll-top-btn.is-visible {
@@ -13714,7 +13715,8 @@ input[type='date']::-webkit-calendar-picker-indicator {
 }
 .miniloader {
     color: #ffffff;
-    font-size: 10px;
+    /* font-size: 10px; */
+    font-size: 1rem;
     margin: 20px 0;
     position: relative;
     text-indent: -9999em;
@@ -13728,7 +13730,9 @@ input[type='date']::-webkit-calendar-picker-indicator {
 
 .miniloader.miniloader-lg {
     transform: scale(0.7);
-    color: #2ca0c4;
+    /* color: #2ca0c4; */
+    color: #1adfbb;
+    box-shadow: rgba(70, 89, 207, 0.467) 0px 0px 30px 10px;
 }
 .miniloader:before,
 .miniloader:after {
@@ -14046,7 +14050,7 @@ input-icon .form-select {
 }
 
 [data-rk] .ju367v9c {
-    background: linear-gradient(45deg, #2ca0c4, #173d7a) !important;
+    /* background: linear-gradient(45deg, #2ca0c4, #173d7a) !important;
     padding: 0.25rem 0.5rem !important;
     font-size: 0.875rem !important;
     border-radius: 0.2rem !important;
@@ -14060,8 +14064,41 @@ input-icon .form-select {
     color: #dee2e6 !important;
     text-align: center !important;
     text-decoration: none;
-    vertical-align: middle;
+    vertical-align: middle; */
 
+    background: none!important;
+    /* font-size: .9rem!important; */
+    font-weight: normal!important;
+    font-family: inherit!important;
+    height: auto!important;
+    border: none!important;
+    color: #ffffff!important;
+    /* font-weight: bold!important; */
+    padding: 5px 10px!important;
+    text-align: center!important;
+    text-decoration: none!important;
+    display: inline-block!important;
+    /* margin: 4px 2px; */
+    cursor: pointer!important;
+    border: 1px solid white!important;
+    border-radius: 25px!important;
+    min-width: 130px!important;
+    font-size: 1rem!important;
+}
+
+[data-rk] .ju367v9c:hover {
+    background-color: #ffffff!important;
+    color: #4659CF!important;
+}
+
+[data-rk] .ju367v86 {
+    padding: 4px 8px!important;
+}
+
+[data-rk] .ju367v7i {
+    padding-right: 4px;
+    font-weight: normal!important;
+    font-family: inherit!important;
 }
 
 .css-1lg62vy {
@@ -14100,9 +14137,9 @@ input-icon .form-select {
     /* top: 25px;
     left: 25px; */
 
-    top: 60px;
-    left: 20px;
-    /* right: 45px; */
+    top: 50px;
+    /* left: 10px; */
+    right: 45px;
    
     text-align: center;
     -webkit-box-align: center;

@@ -179,7 +179,7 @@ function Search() {
 
             <section className='pb-5'>
                 {searchResultsLength.length > 0 ? (
-                    <p className='lead text-muted text-center mb-0'>
+                    <p className='lead text-white text-center mb-0 fs-5'>
                         Found <strong className='fw-bold badge bg-primary mx-2'>{searchResultsLength.length}</strong> items
                         match your search
                     </p>
@@ -206,7 +206,7 @@ function Search() {
                             <div className='col-lg-6 mx-auto'>
                                 <i className='las la-keyboard mb-2' style={{ fontSize: '2.5rem',background: "linear-gradient(0deg, #131DFF, #131dffa6)", filter: "drop-shadow(0px 0px 15px #131DFF)", borderRadius: "5px", padding: "5px 10px" }}></i>
                                 <h3 className='h3'>No search data entered!</h3>
-                                <p className='text-muted mb-0'>Wating for your search...</p>
+                                <p className='mb-0 fs-6'>Wating for your search...</p>
                             </div>
                         </div>
                     ) : null}
@@ -216,7 +216,7 @@ function Search() {
                             <div className='col-lg-6 mx-auto'>
                                 <i className='las la-exclamation mb-2' style={{ fontSize: '3rem' }}></i>
                                 <h3 className='h3'>Cannot find any assets that match your search</h3>
-                                <p className='text-muted mb-0'>You can search for another term...</p>
+                                <p className='mb-0 fs-6'>You can search for another term...</p>
                             </div>
                         </div>
                     ) : null}

@@ -481,7 +481,7 @@ function NftItem({ NFT, title, category, nftKey }) {
 
   return (
     <>
-      <div className={`card top-saller-Card  ${category}`}>
+      <div className={`card top-saller-Card card-hover-minimal ${category}`}>
         <div className="card-body m-1 p-2 h-i-w-Card position-relative">
           {MktIsLoading ? <FullScreenLoader heading="loading" /> : null}
           {/* <div className="position-relative mb-2 shadow"> */}
@@ -611,9 +611,9 @@ function NftItem({ NFT, title, category, nftKey }) {
               </>
             ) : NFT?.sold?.startsWith("video") ? (
               <>
-                <div ref={vidButtonRef} class="c-mm">
+                <div ref={vidButtonRef} className="c-mm">
                   <details>
-                    <summary class="c-mm__play" style={{ top: "11rem" }}>
+                    <summary className="c-mm__play" style={{ top: "11rem" }}>
                       <span data-css-icon="play" onClick={handleToggleVideo}>
                         <i></i>
                       </span>
@@ -654,9 +654,9 @@ function NftItem({ NFT, title, category, nftKey }) {
               <>
                 {/* <audio controls={true} loop muted={true}
                       autoPlay={true} className="audio-element" src={NFT.url} /> */}
-                <div ref={vidButtonRef} class="c-mm">
+                <div ref={vidButtonRef} className="c-mm">
                   <details>
-                    <summary class="c-mm__play" onClick={handleToggleVideo}>
+                    <summary className="c-mm__play" onClick={handleToggleVideo}>
                       <span data-css-icon="play">
                         <i></i>
                       </span>
@@ -668,7 +668,7 @@ function NftItem({ NFT, title, category, nftKey }) {
                     to={`/assets/${NFT.name}/${NFT.Blockchain}`}
                   >
                     <div
-                      class="c-mm__inner"
+                      className="c-mm__inner"
                       style={{ position: "relative" }}
                     // onClick={() => (history.push(`/assets/${NFT.name}/${NFT.Blockchain}`, { state: NFT }))}
                     >
@@ -683,7 +683,7 @@ function NftItem({ NFT, title, category, nftKey }) {
                       />
                       <figure
                         data-filter="grainy text"
-                        class="c-mm__frame"
+                        className="c-mm__frame"
                       ></figure>
                     </div>
                   </Link>
@@ -747,27 +747,27 @@ function NftItem({ NFT, title, category, nftKey }) {
             </p>
           </Link> */}
 
-          <div class="continer mb-2">
-            <div class="row mx-0 my-1">
-              <div class="col-7 px-0">
+          <div className="continer mb-2">
+            <div className="row mx-0 my-1">
+              <div className="col-7 px-0">
                 <NftCategory category={NFT.category} />
               </div>
               {NFT.price == "01000000000000000" ? (
-                <div class="col-5 px-0 text-end">
+                <div className="col-5 px-0 text-end">
                   <span className="nft-text-mini">Chain</span>
                 </div>
               ) : (
-                <div class="col-5 px-0 text-end">
+                <div className="col-5 px-0 text-end">
                   <span className="nft-text-mini">Current Price </span>
                 </div>
               )}
-              {/* <div class="col-5 px-0 text-end">
+              {/* <div className="col-5 px-0 text-end">
                 <span className="nft-text-mini">Current Price </span>
               </div> */}
             </div>
 
-            <div class="row mx-0">
-              <div class="col-7 px-0">
+            <div className="row mx-0">
+              <div className="col-7 px-0">
                 <p className="nft-text-mini d-flex align-items-center m-0">
                   <span className="nft-icons-mini">
                     <i className="las la-clock"></i>
@@ -777,7 +777,7 @@ function NftItem({ NFT, title, category, nftKey }) {
                   </span>
                 </p>
               </div>
-              <div class="col-5 px-0">
+              <div className="col-5 px-0">
                 <p className="d-flex align-items-center justify-content-end m-0">
                   <span className="nft-icons-mini me-1">
                     {NFT.Blockchain === "Binance" ? (
