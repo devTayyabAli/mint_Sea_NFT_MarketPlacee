@@ -1,5 +1,43 @@
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
+MintSea NFT Marketplace
+
+MintSea is a decentralized NFT Marketplace that allows users to mint, buy, and sell NFTs securely on the blockchain. The platform provides an easy-to-use interface for creators and collectors to interact with digital assets using smart contracts.
+
+🚀 Features
+
+🎨 Mint NFTs
+Create and mint unique NFTs with metadata stored on-chain or via IPFS.
+
+🛒 Buy & Sell NFTs
+List NFTs for sale and purchase NFTs directly from other users.
+
+🔐 Wallet Integration
+Connect with popular crypto wallets (e.g., MetaMask).
+
+📜 Smart Contracts
+Secure and transparent transactions powered by blockchain smart contracts.
+
+🌐 Decentralized Marketplace
+No central authority — ownership and transactions are fully decentralized.
+
+🛠️ Tech Stack
+
+Frontend: React / Next.js (update if different)
+
+Blockchain: Ethereum / Polygon (update as needed)
+
+Smart Contracts: Solidity
+
+Web3 Library: Ethers.js / Web3.js
+
+Storage: IPFS / Pinata (optional)
+
+Wallet: MetaMask
+
+
+
+
 ## Available Scripts
 
 In the project directory, you can run:
